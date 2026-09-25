@@ -1712,7 +1712,10 @@
         </div>
         <div style="margin-bottom:14px;">
           <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px;">পাসওয়ার্ড</label>
-          <input type="password" id="login-password" style="width:100%; padding:12px; border:1.5px solid #CBD5E1; border-radius:10px;" placeholder="••••••••" required />
+          <div style="position:relative; display:flex; align-items:center;">
+            <input type="password" id="login-password" style="width:100%; padding:12px 42px 12px 12px; border:1.5px solid #CBD5E1; border-radius:10px; font-size:0.95rem; outline:none;" placeholder="••••••••" required />
+            <i class="fa-regular fa-eye" id="toggle-login-pass" onclick="togglePasswordVisibility('login-password', 'toggle-login-pass')" style="position:absolute; right:14px; color:#64748B; cursor:pointer; font-size:1.1rem;"></i>
+          </div>
         </div>
         <button type="submit" style="width:100%; padding:13px; background:linear-gradient(135deg,#2563EB,#1D4ED8); color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer;" id="btn-login-submit">
           সাইন ইন করুন
@@ -1737,7 +1740,10 @@
         </div>
         <div style="margin-bottom:12px;">
           <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:4px;">পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)</label>
-          <input type="password" id="reg-password" style="width:100%; padding:12px; border:1.5px solid #CBD5E1; border-radius:10px;" placeholder="••••••••" minlength="6" required />
+          <div style="position:relative; display:flex; align-items:center;">
+            <input type="password" id="reg-password" style="width:100%; padding:12px 42px 12px 12px; border:1.5px solid #CBD5E1; border-radius:10px; font-size:0.95rem; outline:none;" placeholder="••••••••" minlength="6" required />
+            <i class="fa-regular fa-eye" id="toggle-reg-pass" onclick="togglePasswordVisibility('reg-password', 'toggle-reg-pass')" style="position:absolute; right:14px; color:#64748B; cursor:pointer; font-size:1.1rem;"></i>
+          </div>
         </div>
         <div style="margin-bottom:14px;">
           <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:4px;">রেফারেল কোড (ঐচ্ছিক)</label>
@@ -1773,6 +1779,9 @@
         </div>
       </div>
       <div class="header-right">
+        <button onclick="downloadMobileApp()" title="Download Android App" style="background: linear-gradient(135deg, #10B981, #059669); color: white; border: none; padding: 6px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 5px; cursor: pointer; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
+          <i class="fa-brands fa-android"></i> অ্যাপ
+        </button>
         <div class="balance-badge"><i class="fa-solid fa-wallet"></i> ৳ <span id="dash-balance">0.00</span></div>
         <button class="icon-btn" onclick="openNotificationsPage()" style="position: relative;">
           <i class="fa-regular fa-bell"></i>
@@ -1801,6 +1810,7 @@
         <!-- ড্রয়ার মেনু লিস্ট -->
         <ul class="drawer-menu">
           <li><a href="#" class="drawer-nav" data-target="view-home"><div class="menu-icon-square" style="background:#10B981;"><i class="fa-solid fa-house"></i></div> Home</a></li>
+          <li><a href="#" onclick="downloadMobileApp(); return false;" style="background: #EEF2FF; border: 1px dashed #6366F1;"><div class="menu-icon-square" style="background:#4F46E5;"><i class="fa-brands fa-android"></i></div> <span style="font-weight:800; color:#4F46E5;">Download App (APK)</span></a></li>
           <li><a href="#" class="drawer-nav" data-target="view-leaderboard"><div class="menu-icon-square" style="background:#16A34A;"><i class="fa-solid fa-trophy"></i></div> Leaderboard</a></li>
           <li><a href="#" class="drawer-nav" data-target="view-home" onclick="showToast('আজকের কোনো গিফট কোড নেই!', true)"><div class="menu-icon-square" style="background:#0284C7;"><i class="fa-solid fa-gift"></i></div> Gift Code</a></li>
           <li><a href="#" class="drawer-nav" data-target="view-wallet"><div class="menu-icon-square" style="background:#F59E0B;"><i class="fa-solid fa-wallet"></i></div> Wallet</a></li>
@@ -2345,7 +2355,7 @@
   <!-- ================= ফায়ারবেস স্ক্রিপ্ট ================= -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { initializeFirestore, setLogLevel, doc, setDoc, getDoc, updateDoc, increment, collection, addDoc, onSnapshot, query, orderBy, limit, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfigAuth = {
@@ -2388,6 +2398,32 @@
     let currentTodayRate = 15;
     let bannerTargetLink = "https://t.me";
     let liveStartDate = new Date("2025-10-28T00:00:00Z");
+    let globalAppDownloadUrl = "";
+
+    // পাসওয়ার্ড শো/হাইড (Eye Toggle)
+    window.togglePasswordVisibility = function(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (!input || !icon) return;
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      }
+    };
+
+    // অ্যাপ ডাউনলোড হ্যান্ডলার
+    window.downloadMobileApp = function() {
+      if (globalAppDownloadUrl && globalAppDownloadUrl.trim()) {
+        window.open(globalAppDownloadUrl.trim(), "_blank");
+      } else {
+        showToast("অ্যাডমিন এখনও অ্যাপ ডাউনলোডের লিংক যুক্ত করেননি!", true);
+      }
+    };
 
     // টোস্ট নোটিফিকেশন
     window.showToast = function(msg, isError = false) {
@@ -2507,13 +2543,75 @@
     updateLiveTimer();
 
     // -------------------------------------------------------------
-    // ফায়ারবেস গ্লোবাল সেটিংস লিসেনার
+    // ফায়ারবেস গ্লোবাল সেটিংস লিসেনার (নাম, লোগো ও ব্যানার লাইভ সিঙ্ক)
     // -------------------------------------------------------------
     function initGlobalSettingsListener() {
       onSnapshot(doc(dbMain, "settings", "global"), (snap) => {
         if (snap.exists()) {
           const data = snap.data();
-          // জিমেইল স্লটের যাবতীয় তথ্য রিয়েল-টাইমে আপডেট
+
+          // ১. সাইটের নাম (Site Name) রিয়েল-টাইম সিঙ্ক
+          if (data.siteName) {
+            document.title = data.siteName;
+            
+            // হেডার ব্র্যান্ড নাম আপডেট
+            const brandTitleWrap = document.querySelector(".brand-title-wrap");
+            if (brandTitleWrap) {
+              const parts = data.siteName.trim().split(" ");
+              if (parts.length > 1) {
+                const mainTitle = parts.slice(0, -1).join(" ");
+                const subTitle = parts[parts.length - 1];
+                brandTitleWrap.innerHTML = `<h3 class="user-brand-name">${escapeHtml(mainTitle)}</h3><span>${escapeHtml(subTitle)}</span>`;
+              } else {
+                brandTitleWrap.innerHTML = `<h3 class="user-brand-name">${escapeHtml(data.siteName)}</h3>`;
+              }
+            }
+            
+            // লগইন স্ক্রিন ব্র্যান্ড নাম আপডেট
+            const authBrand = document.querySelector(".auth-header .user-brand-name");
+            if (authBrand) authBrand.innerText = data.siteName;
+          }
+
+          // ২. সাইটের লোগো ও আইকন (Site Logo / Icon) রিয়েল-টাইম সিঙ্ক
+          const headerLogo = document.getElementById("user-site-logo");
+          const authLogo = document.querySelector(".auth-logo-badge");
+          
+          if (data.siteLogoUrl && data.siteLogoUrl.trim()) {
+            const formattedLogo = formatImageUrl(data.siteLogoUrl.trim());
+            const logoImgHtml = `<img src="${escapeHtml(formattedLogo)}" style="width:100%;height:100%;border-radius:inherit;object-fit:cover;" alt="Logo" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'fa-solid fa-bolt\\'></i>';" />`;
+            if (headerLogo) headerLogo.innerHTML = logoImgHtml;
+            if (authLogo) authLogo.innerHTML = logoImgHtml;
+          } else if (data.siteIcon) {
+            const iconHtml = data.siteIcon.includes("fa-") 
+              ? `<i class="${escapeHtml(data.siteIcon)}"></i>` 
+              : `<span style="font-size:1.3rem;">${escapeHtml(data.siteIcon)}</span>`;
+            if (headerLogo) headerLogo.innerHTML = iconHtml;
+            if (authLogo) authLogo.innerHTML = iconHtml;
+          }
+
+          // ৩. হোম প্রমো ব্যানার ও লিংক রিয়েল-টাইম সিঙ্ক
+          if (data.bannerImgUrl && data.bannerImgUrl.trim()) {
+            const bannerEl = document.getElementById("banner-img");
+            if (bannerEl) {
+              bannerEl.src = formatImageUrl(data.bannerImgUrl.trim());
+            }
+          }
+          if (data.bannerLink) {
+            bannerTargetLink = data.bannerLink.trim();
+          }
+
+          // ৪. সর্বনিম্ন উইথড্রয়াল লিমিট সিঙ্ক
+          if (data.minWithdraw !== undefined) {
+            const minWithEl = document.getElementById("wallet-min-withdraw");
+            if (minWithEl) minWithEl.innerText = data.minWithdraw;
+            const inputAmt = document.getElementById("withdraw-amount");
+            if (inputAmt) {
+              inputAmt.min = data.minWithdraw;
+              inputAmt.placeholder = data.minWithdraw;
+            }
+          }
+
+          // ৫. জিমেইল স্লটের যাবতীয় তথ্য রিয়েল-টাইমে আপডেট
           if (data.todayPassword) {
             document.getElementById("user-today-password").innerText = data.todayPassword;
             document.getElementById("submit-pass-input").value = data.todayPassword;
@@ -2541,10 +2639,8 @@
             document.getElementById("btn-submit-gmail").style.background = "linear-gradient(135deg,#2563EB,#1D4ED8)";
           }
 
-          // ব্যানার, ভিডিও ও লিংক
-          if (data.bannerImgUrl && document.getElementById("banner-img")) document.getElementById("banner-img").src = data.bannerImgUrl;
-          if (data.bannerLink) bannerTargetLink = data.bannerLink;
           if (data.tutorialUrl) globalTutorialVideoUrl = data.tutorialUrl;
+          if (data.appDownloadUrl) globalAppDownloadUrl = data.appDownloadUrl;
           
           // লাইভ সিন্স তারিখ ও টাইমার রিয়েলটাইম আপডেট
           if (data.launchDate) {
@@ -2578,6 +2674,12 @@
           // টেলিগ্রাম পপ-আপ
           if (data.showPopup !== false) {
             document.getElementById("telegram-popup-modal").classList.add("show");
+          }
+          if (data.popupTitle && document.getElementById("pop-title")) {
+            document.getElementById("pop-title").innerText = data.popupTitle;
+          }
+          if (data.popupDesc && document.getElementById("pop-desc")) {
+            document.getElementById("pop-desc").innerText = data.popupDesc;
           }
           if (data.tgChannelLink) document.getElementById("pop-join-link").href = data.tgChannelLink;
         }
@@ -2852,15 +2954,22 @@
         .replace(/'/g, '&#039;');
     }
 
-    // ImgBB এবং সাধারণ ছবির লিংক সঠিক ফরম্যাটে রূপান্তর করার ফাংশন (Crash-Proof)
+    // ImgBB, Google Drive ও যেকোনো ছবির লিংক সঠিক ফরম্যাটে রূপান্তর করার ফাংশন
     function formatImageUrl(url) {
       if (!url || typeof url !== 'string') return '';
       url = url.trim();
-      if (url.includes('ibb.co/') && !url.includes('i.ibb.co/')) {
-        const parts = url.split('ibb.co/');
-        if (parts[1]) {
-          const id = parts[1].split('/')[0];
-          return `https://i.ibb.co/${id}/image.png`;
+      // Google Drive View Link to Direct Image Link
+      if (url.includes('drive.google.com/file/d/')) {
+        const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (idMatch && idMatch[1]) {
+          return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
+        }
+      }
+      // ImgBB View Link to Direct Image Link
+      if ((url.includes('ibb.co/') || url.includes('ibb.co.com/')) && !url.includes('i.ibb.co')) {
+        const match = url.match(/ibb\.(?:co|co\.com)\/([a-zA-Z0-9]+)/);
+        if (match && match[1]) {
+          return `https://i.ibb.co/${match[1]}/image.png`;
         }
       }
       return url;
@@ -3161,8 +3270,9 @@
       }
     }
 
-    // লিডারবোর্ড লিসেনার চালু করা
+    // লিডারবোর্ড ও গ্লোবাল সেটিংস সাথে সাথে চালু করা (লগইন ছাড়াও যাতে নাম ও লোগো চলে আসে)
     initLeaderboardListener();
+    initGlobalSettingsListener();
 
     // -------------------------------------------------------------
     // পাসওয়ার্ড রিসেট রিকোয়েস্ট (স্ক্রিনশট ৩ হুবহু)
@@ -3280,8 +3390,9 @@
       const method = document.getElementById("withdraw-gateway").value;
       const accountNumber = document.getElementById("withdraw-account").value.trim();
 
-      if (!amt || amt < 50) {
-        showToast("সর্বনিম্ন উত্তোলনের পরিমাণ ৫০৳!", true);
+      const minWithdrawLimit = Number(document.getElementById("wallet-min-withdraw")?.innerText) || 50;
+      if (!amt || amt < minWithdrawLimit) {
+        showToast(`সর্বনিম্ন উত্তোলনের পরিমাণ ${minWithdrawLimit}৳!`, true);
         return;
       }
 
@@ -3457,27 +3568,17 @@
       }
     });
 
-    // ৩. গুগল সাইন-ইন
-    document.getElementById("btn-google-auth").addEventListener("click", async () => {
-      const gBtn = document.getElementById("btn-google-auth");
-      gBtn.style.opacity = "0.6";
-      gBtn.style.pointerEvents = "none";
-      showToast("গুগল সাইন-ইন প্রসেস হচ্ছে...");
-
+    // ৩. সুপারফাস্ট গুগল সাইন-ইন (মোবাইলের সব জিমেইল লিস্ট সহ ওপেন হবে)
+    async function handleGoogleUserData(user) {
+      if (!user) return;
       try {
-        const provider = new GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
-        
-        const res = await signInWithPopup(auth, provider);
-        const user = res.user;
-
         const userDocRef = doc(dbMain, "users", user.uid);
         const uDoc = await getDoc(userDocRef);
 
         if (!uDoc.exists()) {
           const genRef = generateUniqueRefCode(user.uid);
           await setDoc(userDocRef, {
-            name: user.displayName || "Google User",
+            name: user.displayName || user.email.split('@')[0] || "Google User",
             email: user.email || "",
             phone: user.phoneNumber || "",
             photoUrl: user.photoURL || "",
@@ -3490,22 +3591,51 @@
             createdAt: new Date().toISOString()
           }, { merge: true });
         }
+        showToast("গুগল সাইন-ইন সফল হয়েছে!");
+      } catch (e) {
+        console.warn("Google data save notice:", e);
+      }
+    }
 
-        showToast("গুগল লগইন সফল হয়েছে!");
+    // পেজ লোডের পর রিডাইরেক্ট রেজাল্ট চেক (মোবাইলের জন্য ১০০% নিশ্চিত লগইন)
+    getRedirectResult(auth).then(async (res) => {
+      if (res && res.user) {
+        await handleGoogleUserData(res.user);
+      }
+    }).catch((err) => console.warn("Redirect result notice:", err));
+
+    document.getElementById("btn-google-auth")?.addEventListener("click", async () => {
+      const gBtn = document.getElementById("btn-google-auth");
+      gBtn.disabled = true;
+      showToast("গুগল অ্যাকাউন্ট লোড হচ্ছে...");
+
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+
+      try {
+        // প্রথমে পপআপ চেষ্টা করবে
+        const res = await signInWithPopup(auth, provider);
+        if (res && res.user) {
+          await handleGoogleUserData(res.user);
+        }
       } catch (err) {
-        console.error("Google Auth Error:", err);
-        if (err.code === "auth/popup-closed-by-user") {
-          showToast("লগইন উইন্ডো বন্ধ করা হয়েছে!", true);
-        } else if (err.code === "auth/popup-blocked") {
-          showToast("ব্রাউজারের পপ-আপ ব্লক করা! পপ-আপ এলাও করুন।", true);
+        console.warn("Popup blocked or failed, switching to Redirect:", err.code);
+        // মোবাইলে পপআপ ব্লক হলে স্বয়ংক্রিয়ভাবে সরাসরি রিডাইরেক্ট করবে (সব জিমেইল দেখাবে)
+        if (err.code === "auth/popup-blocked" || err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") {
+          try {
+            await signInWithRedirect(auth, provider);
+          } catch (redErr) {
+            showToast("গুগল সাইন-ইন ব্যর্থ হয়েছে!", true);
+          }
+        } else if (err.code === "auth/operation-not-allowed") {
+          showToast("Firebase Console-এ Google Sign-in সক্রিয় (Enable) করা নেই!", true);
         } else if (err.code === "auth/unauthorized-domain") {
-          showToast("ফায়ারবেসে আপনার ডোমেইন যুক্ত করা নেই!", true);
+          showToast("Firebase-এ আপনার বর্তমান ডোমেনটি Authorised Domain হিসেবে যোগ করুন!", true);
         } else {
-          showToast("গুগল দিয়ে প্রবেশ করা সম্ভব হয়নি!", true);
+          showToast("লগইন উইন্ডো খোলা সম্ভব হয়নি!", true);
         }
       } finally {
-        gBtn.style.opacity = "1";
-        gBtn.style.pointerEvents = "auto";
+        gBtn.disabled = false;
       }
     });
 
