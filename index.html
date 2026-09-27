@@ -3220,6 +3220,9 @@
         deleteDoc, 
         getDoc, 
         getDocs, 
+        query,
+        where,
+        limit,
         onSnapshot, 
         serverTimestamp, 
         writeBatch 
@@ -4268,6 +4271,7 @@
             showTab('home');
             
             calculateJoinedMatches();
+            loadNotifsBadge();
             
             onSnapshot(doc(db, 'users', u.uid), snap => {
                 if(snap.exists()) {
@@ -4999,92 +5003,203 @@
 
     function triggerVerify() { verifyAutoPay(currentPayMethod); }
 
-    // ===== SECURE AUTO PAYMENT GATEWAY (FIRESTORE) =====
+    // ===== ULTRA-FAST AUTO PAYMENT GATEWAY (NO LAG / NO INFINITE LOADING) =====
+    const userPaymentAttemptCounts = {};
+
     async function verifyAutoPay(method) {
         if(!currentUser) return Swal.fire('Error', 'Please login first', 'error');
         
         const rawTrx = document.getElementById(`trx-${method}`)?.value?.trim() || '';
-        if(!rawTrx) return Swal.fire({ icon:'warning', title:'Oops!', text:'Please enter Transaction ID' });
+        const rawAmt = parseFloat(document.getElementById(`amount-${method}`)?.value?.trim()) || 0;
+
+        if(!rawTrx) return Swal.fire({ icon:'warning', title:'Oops!', text:'অনুগ্রহ করে ট্রানজেকশন আইডি (TrxID) দিন!' });
+        if(!rawAmt || rawAmt <= 0) return Swal.fire({ icon:'warning', title:'Oops!', text:'অনুগ্রহ করে টাকার সঠিক পরিমাণ দিন!' });
         
         const cleanTrxId = rawTrx.replace(/[.#$\[\]\/]/g, '').trim().toUpperCase();
-        if(!cleanTrxId || cleanTrxId.length < 4) return Swal.fire({ icon:'error', title:'Invalid', text:'Invalid Transaction ID format' });
+        if(!cleanTrxId || cleanTrxId.length < 4) return Swal.fire({ icon:'error', title:'ভুল ট্রানজেকশন আইডি', text:'ট্রানজেকশন আইডির ফরম্যাট সঠিক নয়!' });
 
         toggleLoader(true);
 
         try {
-            // 1. Check if used in Auto Pay collection
-            const usedSnap = await getDoc(doc(db, 'Auto Pay', cleanTrxId));
-            if(usedSnap.exists()) {
+            // ১. প্যারালাল চেক (Auto Pay ও Pending Deposit) - মিলি-সেকেন্ডে শেষ হবে
+            const [usedSnap, pendingSnap] = await Promise.all([
+                getDoc(doc(db, 'Auto Pay', cleanTrxId)).catch(() => null),
+                getDocs(query(collection(db, 'deposit_requests'), where('txID', '==', cleanTrxId), limit(1))).catch(() => null)
+            ]);
+
+            if (usedSnap && usedSnap.exists()) {
                 toggleLoader(false);
-                return Swal.fire({ icon:'error', title:'Already Used!', text:'This Transaction ID has already been used!' });
+                return Swal.fire({ icon:'error', title:'ব্যবহৃত ট্রানজেকশন!', text:'এই ট্রানজেকশন আইডিটি দিয়ে ইতোমধ্যে টাকা অ্যাড করা হয়ে গেছে!' });
             }
-            
-            // 2. Search in Gateway Logs (XNXANIKPAY)
-            const apiSnap = await getDocs(collection(db, 'XNXANIKPAY'));
-            let matchedPayment = null;
-            
-            apiSnap.forEach(docSnap => {
-                const p = docSnap.data();
-                if(p && p.txid) {
-                    const logTrx = String(p.txid).replace(/[.#$\[\]\/]/g, '').trim().toUpperCase();
-                    if(logTrx === cleanTrxId) {
-                        matchedPayment = p;
-                    }
+
+            if (pendingSnap && !pendingSnap.empty) {
+                const pendDoc = pendingSnap.docs[0].data();
+                if (pendDoc.status === 'pending') {
+                    toggleLoader(false);
+                    return Swal.fire({ 
+                        icon:'info', 
+                        title:'অনুরোধ জমা রয়েছে', 
+                        text:'এই ট্রানজেকশন আইডিটি ইতোমধ্যে পেন্ডিং রয়েছে। অ্যাডমিন খুব দ্রুত এটি যাচাই করে অ্যাপ্রুভ করবেন।' 
+                    });
                 }
-            });
-            
-            if(!matchedPayment || !matchedPayment.amount) {
+            }
+
+            // ২. XNXANIKPAY তে সরাসরি TrxID দিয়ে অতি দ্রুত সার্চ (পুরো ডাটাবেস ডাউনলোড হবে না)
+            let matchedPayment = null;
+
+            // ২.১ সরাসরি ডকুমেন্ট আইডি চেক (৫০ মিলি-সেকেন্ড)
+            try {
+                const directDoc = await getDoc(doc(db, 'XNXANIKPAY', cleanTrxId));
+                if (directDoc.exists()) matchedPayment = directDoc.data();
+            } catch(e) {}
+
+            // ২.২ ফিল্টার কুয়েরি (১০০ মিলি-সেকেন্ড)
+            if (!matchedPayment) {
+                try {
+                    const qTrx = await getDocs(query(collection(db, 'XNXANIKPAY'), where('txid', '==', cleanTrxId), limit(1)));
+                    if (!qTrx.empty) matchedPayment = qTrx.docs[0].data();
+                } catch(e) {}
+            }
+
+            // ২.৩ যদি ফরওয়ার্ডার অ্যাপ ফিল্ড ছোট হাতের করে থাকে, তবে শুধু সাম্প্রতিক ২৫টি SMS চেক
+            if (!matchedPayment) {
+                try {
+                    const recentSmsSnap = await getDocs(query(collection(db, 'XNXANIKPAY'), limit(25)));
+                    recentSmsSnap.forEach(dSnap => {
+                        const p = dSnap.data();
+                        if (p) {
+                            const cTrx = String(p.txid || p.trxId || p.transaction_id || '').replace(/[.#$\[\]\/]/g, '').trim().toUpperCase();
+                            if (cTrx === cleanTrxId) matchedPayment = p;
+                        }
+                    });
+                } catch(e) {}
+            }
+
+            const now = new Date();
+
+            // ৩. ম্যাচ পেলে সরাসরি ব্যালেন্স অ্যাড (Auto Approved)
+            if (matchedPayment && (matchedPayment.amount || rawAmt)) {
+                const rechargeAmount = parseFloat(matchedPayment.amount) || rawAmt;
+                const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
+                const userData = userSnap.data() || {};
+                const currentDeposit = parseFloat(userData.deposit) || 0;
+                const updatedDeposit = currentDeposit + rechargeAmount;
+
+                const batch = writeBatch(db);
+                batch.update(doc(db, 'users', currentUser.uid), { deposit: updatedDeposit });
+                batch.set(doc(db, 'Auto Pay', cleanTrxId), {
+                    amount: rechargeAmount,
+                    usedBy: currentUser.uid,
+                    userEmail: currentUser.email || '',
+                    method: method,
+                    timestamp: now.toLocaleString(),
+                    timestampMs: Date.now(),
+                    time: serverTimestamp()
+                });
+                const txDocRef = doc(collection(db, 'transactions'));
+                batch.set(txDocRef, {
+                    userId: currentUser.uid,
+                    type: `Deposit (${method.toUpperCase()})`,
+                    amount: rechargeAmount,
+                    method: method,
+                    status: 'Success',
+                    txID: cleanTrxId,
+                    date: now.toLocaleString(),
+                    timestampMs: Date.now()
+                });
+                const depReqRef = doc(collection(db, 'deposit_requests'));
+                batch.set(depReqRef, {
+                    userId: currentUser.uid,
+                    userName: currentUser.displayName || userData.username || 'User',
+                    userEmail: currentUser.email || '',
+                    userPhone: userData.phone || '',
+                    amount: rechargeAmount,
+                    method: method,
+                    txID: cleanTrxId,
+                    status: 'approved',
+                    type: 'Auto Approved',
+                    timestamp: now.toLocaleString(),
+                    timestampMs: Date.now(),
+                    processedAt: now.toLocaleString()
+                });
+
+                await batch.commit();
+                depositBal = updatedDeposit;
+                delete userPaymentAttemptCounts[cleanTrxId];
+
+                ['bkash', 'rocket', 'nagad'].forEach(m => {
+                    const inpTrx = document.getElementById(`trx-${m}`);
+                    const inpAmt = document.getElementById(`amount-${m}`);
+                    if(inpTrx) inpTrx.value = '';
+                    if(inpAmt) inpAmt.value = '';
+                });
+
                 toggleLoader(false);
                 return Swal.fire({ 
-                    icon: 'error', 
-                    title: 'Payment Not Found', 
-                    text: 'No payment found matching this Transaction ID. Please check and try again.' 
+                    icon: 'success', 
+                    title: 'টাকা যোগ সফল হয়েছে! 🎉', 
+                    text: `৳${rechargeAmount} আপনার ডিপোজিট ব্যালেন্সে যুক্ত করা হয়েছে।` 
+                }).then(() => {
+                    window.navigateSub('wallet');
                 });
             }
 
-            const rechargeAmount = parseFloat(matchedPayment.amount) || 0;
-            if(rechargeAmount <= 0) {
-                toggleLoader(false);
-                return Swal.fire({ icon:'error', title:'Invalid Amount', text:'Transaction amount is invalid.' });
+            // ৪. ম্যাচ না পেলে ট্রাই গণনা
+            if (!userPaymentAttemptCounts[cleanTrxId]) {
+                userPaymentAttemptCounts[cleanTrxId] = 1;
+            } else {
+                userPaymentAttemptCounts[cleanTrxId]++;
             }
 
-            // 3. Update User Balance & Add Auto Pay Log using Batch
+            // ১ম ট্রাই: সাথে সাথে পপ-আপ দেবে (১ সেকেন্ডও লাগবে না)
+            if (userPaymentAttemptCounts[cleanTrxId] === 1) {
+                toggleLoader(false);
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'ট্রাঞ্জেকশন পাওয়া যায়নি!',
+                    html: `আপনার দেওয়া ট্রাঞ্জেকশন আইডি <b>${cleanTrxId}</b>-এর কোনো পেমেন্ট পাওয়া যায়নি।<br><br><b style="color:var(--primary);">অনুগ্রহ করে আবার চেষ্টা করুন।</b>`,
+                    confirmButtonText: 'আবার চেষ্টা করুন'
+                });
+            }
+
+            // ২য় ট্রাই: সার্ভার ব্যস্ততার মেসেজ এবং এডমিনে পেন্ডিং পাঠানো
             const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
             const userData = userSnap.data() || {};
-            const currentDeposit = parseFloat(userData.deposit) || 0;
-            const updatedDeposit = currentDeposit + rechargeAmount;
-            const now = new Date();
 
-            const batch = writeBatch(db);
-            
-            batch.update(doc(db, 'users', currentUser.uid), { deposit: updatedDeposit });
-            
-            batch.set(doc(db, 'Auto Pay', cleanTrxId), {
-                amount: rechargeAmount,
-                usedBy: currentUser.uid,
-                userEmail: currentUser.email || '',
-                method: method,
-                timestamp: now.toLocaleString(),
-                timestampMs: Date.now(),
-                time: serverTimestamp()
-            });
-
-            const txDocRef = doc(collection(db, 'transactions'));
-            batch.set(txDocRef, {
+            const depReqDoc = await addDoc(collection(db, 'deposit_requests'), {
                 userId: currentUser.uid,
-                type: 'Deposit (Auto)',
-                amount: rechargeAmount,
+                userName: currentUser.displayName || userData.username || 'User',
+                userEmail: currentUser.email || '',
+                userPhone: userData.phone || '',
+                amount: rawAmt,
                 method: method,
-                status: 'Success',
                 txID: cleanTrxId,
-                date: now.toLocaleString(),
+                status: 'pending',
+                type: 'Manual Pending',
+                timestamp: now.toLocaleString(),
                 timestampMs: Date.now()
             });
 
-            await batch.commit();
-            
-            depositBal = updatedDeposit;
-            
+            await addDoc(collection(db, 'transactions'), {
+                userId: currentUser.uid,
+                type: `Deposit (${method.toUpperCase()})`,
+                amount: rawAmt,
+                method: method,
+                status: 'Pending',
+                txID: cleanTrxId,
+                date: now.toLocaleString(),
+                timestampMs: Date.now(),
+                depositRequestId: depReqDoc.id
+            });
+
+            await addDoc(collection(db, 'notifications'), {
+                title: 'ডিপোজিট রিকোয়েস্ট পেন্ডিং রয়েছে ⏳',
+                body: `আমাদের সার্ভার ব্যস্ত থাকার কারণে আপনার ৳${rawAmt} টাকার ডিপোজিট (TrxID: ${cleanTrxId}) অটো যোগ হতে কিছুটা সময় লাগছে। এডমিন খুব শীঘ্রই যাচাই করে টাকা ব্যালেন্সে যুক্ত করে দেবেন।`,
+                targetUserId: currentUser.uid,
+                time: now.toLocaleString(),
+                timestampMs: Date.now()
+            });
+
             ['bkash', 'rocket', 'nagad'].forEach(m => {
                 const inpTrx = document.getElementById(`trx-${m}`);
                 const inpAmt = document.getElementById(`amount-${m}`);
@@ -5092,18 +5207,22 @@
                 if(inpAmt) inpAmt.value = '';
             });
 
+            delete userPaymentAttemptCounts[cleanTrxId];
             toggleLoader(false);
-            Swal.fire({ 
-                icon: 'success', 
-                title: 'Money Added Successfully! 🎉', 
-                text: `৳${rechargeAmount} has been credited to your deposit wallet.` 
+
+            return Swal.fire({
+                icon: 'info',
+                title: 'সার্ভার ব্যস্ত রয়েছে ⏳',
+                html: `আমাদের সার্ভার ব্যস্ত/ডাউন থাকার কারণে টাকা অ্যাড হতে একটু সময় লাগছে।<br><br>আপনার ডিপোজিট রিকোয়েস্টটি অ্যাডমিনের কাছে পাঠানো হয়েছে। এডমিন যাচাই করে দ্রুত ব্যালেন্সে টাকা যুক্ত করে দেবেন।`,
+                confirmButtonText: 'ঠিক আছে',
+                confirmButtonColor: '#5c67f6'
             }).then(() => {
                 window.navigateSub('wallet');
             });
 
-        } catch(err) {
+        } catch (err) {
             toggleLoader(false);
-            Swal.fire('Error', err.message || 'Something went wrong. Please contact support.', 'error');
+            Swal.fire('Error', err.message, 'error');
         }
     }
 
@@ -5152,27 +5271,61 @@
         });
     }
 
-    // ===== TARGETED NOTIFICATIONS (ALL OR USER SPECIFIC) =====
+    // ===== TARGETED NOTIFICATIONS (ALL OR USER SPECIFIC) WITH SMART READ SYSTEM =====
     function isNotifForMe(n) {
         if(!n.targetUserId || n.targetUserId === 'all') return true;
         if(currentUser && n.targetUserId === currentUser.uid) return true;
         return false;
     }
 
+    function getReadNotifIds() {
+        try {
+            const uid = currentUser ? currentUser.uid : 'guest';
+            return JSON.parse(localStorage.getItem('read_notifs_' + uid) || '[]');
+        } catch(e) { return []; }
+    }
+
+    function markNotifsRead(ids) {
+        try {
+            const uid = currentUser ? currentUser.uid : 'guest';
+            const readIds = getReadNotifIds();
+            ids.forEach(id => {
+                if(!readIds.includes(id)) readIds.push(id);
+            });
+            localStorage.setItem('read_notifs_' + uid, JSON.stringify(readIds));
+            localStorage.setItem('last_seen_notif_time_' + uid, Date.now().toString());
+        } catch(e) {}
+    }
+
     function loadNotifsBadge() {
         onSnapshot(collection(db, 'notifications'), snapshot => {
-            let myCount = 0;
+            const uid = currentUser ? currentUser.uid : 'guest';
+            const lastSeenTime = parseInt(localStorage.getItem('last_seen_notif_time_' + uid) || '0');
+            const readIds = getReadNotifIds();
+
+            let myUnreadCount = 0;
             snapshot.forEach(docSnap => {
-                if(isNotifForMe(docSnap.data())) myCount++;
+                const n = docSnap.data();
+                if(isNotifForMe(n)) {
+                    const notifTime = n.timestampMs || (n.createdAt?.toMillis ? n.createdAt.toMillis() : 0);
+                    const isAlreadyRead = readIds.includes(docSnap.id) || (notifTime > 0 && notifTime <= lastSeenTime);
+                    if(!isAlreadyRead) {
+                        myUnreadCount++;
+                    }
+                }
             });
+
+            // প্রোফাইল কাউন্ট ব্যাজ আপডেট (০ হলে অফ থাকবে)
             const badge = document.getElementById('menu-notif-badge');
             if (badge) {
-                badge.innerText = myCount;
-                badge.style.display = myCount > 0 ? 'inline-block' : 'none';
+                badge.innerText = myUnreadCount;
+                badge.style.display = myUnreadCount > 0 ? 'inline-block' : 'none';
             }
+
+            // হেডারের লাল বাতি (০ হলে অফ থাকবে)
             const topBadge = document.getElementById('top-header-notif-badge');
             if(topBadge) {
-                topBadge.style.display = myCount > 0 ? 'block' : 'none';
+                topBadge.style.display = myUnreadCount > 0 ? 'block' : 'none';
             }
         });
     }
@@ -5180,13 +5333,33 @@
     function loadNotifs() {
         const l = document.getElementById('notif-list-container');
         if(!l) return;
+
+        // নোটিফিকেশন পেজে ঢোকার সাথে সাথে ইনস্ট্যান্ট লাল বাতি ও কাউন্ট নিভিয়ে দেওয়া
+        const badge = document.getElementById('menu-notif-badge');
+        if(badge) {
+            badge.innerText = '0';
+            badge.style.display = 'none';
+        }
+        const topBadge = document.getElementById('top-header-notif-badge');
+        if(topBadge) {
+            topBadge.style.display = 'none';
+        }
+
         onSnapshot(collection(db, 'notifications'), snapshot => {
             l.innerHTML = "";
             const myNotifs = [];
+            const myNotifIds = [];
+
             snapshot.forEach(docSnap => {
                 const n = docSnap.data();
-                if(isNotifForMe(n)) myNotifs.push(n);
+                if(isNotifForMe(n)) {
+                    myNotifs.push({ id: docSnap.id, ...n });
+                    myNotifIds.push(docSnap.id);
+                }
             });
+
+            // সকল বর্তমান নোটিফিকেশন পড়া হয়ে গেছে (Read) হিসেবে সেভ করা
+            markNotifsRead(myNotifIds);
 
             if(myNotifs.length === 0) {
                 l.innerHTML = "<div class='empty-msg'>কোনো নোটিফিকেশন নেই</div>";
