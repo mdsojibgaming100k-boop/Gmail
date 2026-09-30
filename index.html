@@ -6,24 +6,28 @@
 <title>ST TOURNAMENT BD</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <style>
     :root {
-        --primary: #5c67f6;
-        --primary-light: #eef0ff;
-        --primary-dark: #4752e6;
-        --secondary: #6366f1;
+        --primary: #ff5722;
+        --primary-light: #fff3e0;
+        --primary-dark: #e64a19;
+        --secondary: #ff7043;
         --success: #22c55e;
         --danger: #ef4444;
-        --bg-color: #f6f8fc;
+        --bg-color: #fafafa;
         --card-bg: #ffffff;
         --text-dark: #1e293b;
         --text-muted: #64748b;
-        --border-color: #e2e8f0;
+        --border-color: #f0ebe6;
         --white: #ffffff;
-        --wallet-gradient: linear-gradient(135deg, #4f46e5, #6366f1, #818cf8);
+        --wallet-gradient: linear-gradient(135deg, #ff6b00, #ff3d00);
+        --orange-gradient: linear-gradient(90deg, #ff5722 0%, #ff7043 100%);
         --bkash-color: #E2136E;
         --rocket-color: #8C3494;
         --nagad-color: #F7941D;
@@ -852,12 +856,13 @@
 
     /* PROFILE */
     .profile-header-bg {
-        background: linear-gradient(135deg, var(--primary), #42a5f5);
+        background: linear-gradient(135deg, #ff5722, #ff8a65);
         padding: 40px 20px 30px;
         text-align: center;
         color: white;
         margin-bottom: 20px;
         border-radius: 0 0 20px 20px;
+        box-shadow: 0 4px 20px rgba(255, 87, 34, 0.25);
     }
 
     .profile-avatar-box img {
@@ -902,7 +907,7 @@
 
     /* PROFILE RULES BUTTON */
     .profile-rules-btn {
-        background: linear-gradient(135deg, #1a1040, #2a1a60);
+        background: linear-gradient(135deg, #ff5722, #e64a19);
         border-radius: 12px;
         padding: 16px 20px;
         margin: 15px 0 10px;
@@ -911,7 +916,8 @@
         justify-content: space-between;
         cursor: pointer;
         transition: 0.3s;
-        border: 1px solid rgba(255,215,0,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        box-shadow: 0 4px 15px rgba(255, 87, 34, 0.2);
     }
 
     .profile-rules-btn:active {
@@ -1242,16 +1248,17 @@
 
     .btn-join-main {
         border: none;
-        background: linear-gradient(135deg, #3F51B5, #5C6BC0);
+        background: linear-gradient(90deg, #ff5722, #ff7043);
         color: white;
         padding: 8px 24px;
-        border-radius: 8px;
+        border-radius: 20px;
         font-size: 13px;
-        font-weight: 800;
+        font-weight: 900;
         cursor: pointer;
         flex-shrink: 0;
         transition: 0.2s;
-        box-shadow: 0 2px 8px rgba(63,81,181,0.2);
+        box-shadow: 0 4px 14px rgba(255, 87, 34, 0.35);
+        letter-spacing: 0.5px;
     }
     
     .btn-join-main:active {
@@ -1752,16 +1759,18 @@
         bottom: 20px;
         left: 5%;
         width: 90%;
-        background: #5E35B1;
+        background: linear-gradient(90deg, #ff5722, #ff7043);
         color: white;
-        padding: 15px;
+        padding: 16px;
         border-radius: 30px;
         border: none;
-        font-size: 18px;
-        font-weight: 800;
+        font-size: 17px;
+        font-weight: 900;
         cursor: pointer;
-        box-shadow: 0 4px 10px rgba(94, 53, 177, 0.4);
+        box-shadow: 0 6px 20px rgba(255, 87, 34, 0.45);
         z-index: 100;
+        letter-spacing: 1px;
+        text-transform: uppercase;
     }
 
     /* RULES */
@@ -2258,21 +2267,343 @@
     .col-kill { width: 20%; text-align: center; }
     .col-win { width: 20%; text-align: right; }
 
-    /* UID MODAL */
+    /* MODERN UID TOP-UP MODAL DESIGN */
+    .uid-modal-box {
+        background: #ffffff;
+        width: 90%;
+        max-width: 380px;
+        border-radius: 24px;
+        padding: 26px 20px 22px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        animation: popupScale 0.3s ease-out;
+        border: 1px solid rgba(255, 87, 34, 0.15);
+    }
+
+    .uid-top-badge {
+        width: 65px;
+        height: 65px;
+        background: linear-gradient(135deg, #ff5722, #ff8a65);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        margin: -48px auto 14px;
+        box-shadow: 0 10px 25px rgba(255, 87, 34, 0.4);
+        border: 3px solid #ffffff;
+    }
+
+    .uid-modal-title {
+        font-size: 20px;
+        font-weight: 900;
+        color: #1e293b;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+
+    .uid-pkg-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #fff3e0;
+        color: #e65100;
+        font-size: 13px;
+        font-weight: 800;
+        padding: 4px 14px;
+        border-radius: 20px;
+        margin-bottom: 16px;
+        border: 1px solid #ffe0b2;
+    }
+
+    .uid-input-wrapper {
+        position: relative;
+        margin-bottom: 14px;
+    }
+
+    .uid-input-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #ff5722;
+        font-size: 16px;
+    }
+
     .uid-modal-input {
         width: 100%;
-        padding: 14px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 16px;
-        text-align: center;
+        padding: 14px 14px 14px 42px;
+        border: 2px solid #e2e8f0;
+        border-radius: 14px;
+        font-size: 15px;
+        font-weight: 700;
+        color: #1e293b;
+        background: #f8fafc;
         outline: none;
-        transition: 0.3s;
+        transition: all 0.25s ease;
     }
 
     .uid-modal-input:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px rgba(63,81,181,0.1);
+        background: #ffffff;
+        border-color: #ff5722;
+        box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.15);
+    }
+
+    /* সতর্কতা বক্স */
+    .uid-notice-box {
+        background: #fef2f2;
+        border: 1px dashed #fca5a5;
+        border-radius: 12px;
+        padding: 10px 12px;
+        text-align: left;
+        margin-bottom: 18px;
+    }
+
+    .uid-notice-item {
+        font-size: 11.5px;
+        color: #991b1b;
+        font-weight: 600;
+        line-height: 1.5;
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        margin-bottom: 4px;
+    }
+
+    .uid-notice-item:last-child {
+        margin-bottom: 0;
+        color: #b45309;
+    }
+
+    /* প্রিমিয়াম বাটন */
+    .uid-btn-confirm {
+        width: 100%;
+        height: 48px;
+        background: linear-gradient(135deg, #ff5722 0%, #ff7043 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 14px;
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 6px 18px rgba(255, 87, 34, 0.35);
+        transition: transform 0.15s ease;
+    }
+
+    .uid-btn-confirm:active {
+        transform: scale(0.97);
+    }
+
+    .uid-btn-cancel {
+        width: 100%;
+        height: 42px;
+        background: transparent;
+        color: #64748b;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 14px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .uid-btn-cancel:active {
+        background: #f1f5f9;
+        transform: scale(0.98);
+    }
+
+    /* ================= ESPORTS LOGIN & FIGHTER CSS ================= */
+    #auth-view {
+        background: #FFFFFF !important;
+        background-image: 
+            radial-gradient(rgba(255, 77, 0, 0.04) 1px, transparent 1px),
+            linear-gradient(to right, rgba(226, 232, 240, 0.3) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(226, 232, 240, 0.3) 1px, transparent 1px) !important;
+        background-size: 24px 24px, 48px 48px, 48px 48px !important;
+    }
+
+    .character-stage {
+        position: relative;
+        width: 100%;
+        max-width: 420px;
+        height: 220px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin: 0 auto;
+        overflow: visible;
+        padding: 0 4px;
+    }
+
+    .character-backdrop {
+        position: absolute;
+        width: 280px;
+        height: 150px;
+        left: 50%;
+        top: 55%;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(ellipse, rgba(255, 77, 0, 0.15) 0%, rgba(255, 122, 0, 0.03) 65%, transparent 75%);
+        pointer-events: none;
+    }
+
+    .hud-chip {
+        position: absolute;
+        background: #FFFFFF;
+        padding: 4px 9px;
+        border-radius: 6px;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255, 77, 0, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        z-index: 10;
+    }
+    .hud-chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #FF4D00; }
+    .hud-chip.chip-left { top: 6px; left: 2px; animation: chipFloat 3s ease-in-out infinite alternate; }
+    .hud-chip.chip-right { top: 6px; right: 2px; animation: chipFloat 3.4s ease-in-out 0.5s infinite alternate; }
+
+    @keyframes chipFloat { from { transform: translateY(0px); } to { transform: translateY(-5px); } }
+
+    .fighter-ak47-box { position: relative; width: 145px; height: 175px; }
+    .fighter-ump-box { position: relative; width: 145px; height: 175px; transform: scaleX(-1); }
+
+    .ak-gunner { animation: akFireRecoil 0.13s infinite 0.2s; transform-origin: 40px 110px; }
+    @keyframes akFireRecoil {
+        0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+        50% { transform: translate3d(-4px, -1.5px, 0) rotate(-2deg); }
+    }
+
+    .ump-gunner { animation: umpFireRecoil 0.08s infinite 0.25s; transform-origin: 40px 110px; }
+    @keyframes umpFireRecoil {
+        0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+        50% { transform: translate3d(-2.5px, -1px, 0) rotate(-1.5deg); }
+    }
+
+    .muzzle-ak {
+        position: absolute; top: 55px; right: -20px; width: 44px; height: 32px;
+        background: radial-gradient(circle, #FFFFFF 15%, #FFAA00 45%, #FF2200 85%, transparent 90%);
+        border-radius: 50%; filter: drop-shadow(0 0 12px #FF4D00); opacity: 0;
+        animation: flashFireAK 0.13s infinite 0.2s; pointer-events: none; z-index: 6;
+    }
+    @keyframes flashFireAK {
+        0%, 100% { opacity: 0; transform: scale(0.3); }
+        50% { opacity: 1; transform: scale(1.25) rotate(15deg); }
+    }
+
+    .muzzle-ump {
+        position: absolute; top: 64px; right: -16px; width: 36px; height: 26px;
+        background: radial-gradient(circle, #FFFFFF 15%, #00F0FF 45%, #0055FF 85%, transparent 90%);
+        border-radius: 50%; filter: drop-shadow(0 0 12px #00F0FF); opacity: 0;
+        animation: flashFireUMP 0.08s infinite 0.25s; pointer-events: none; z-index: 6;
+    }
+    @keyframes flashFireUMP {
+        0%, 100% { opacity: 0; transform: scale(0.3); }
+        50% { opacity: 1; transform: scale(1.2) rotate(-12deg); }
+    }
+
+    .shell-eject-ak {
+        position: absolute; top: 60px; left: 95px; width: 4px; height: 2px;
+        background: #FCD34D; border-radius: 1px; animation: shellFlyAK 0.26s infinite 0.2s linear; opacity: 0;
+    }
+    @keyframes shellFlyAK {
+        0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+        50% { opacity: 1; transform: translate(12px, -18px) rotate(120deg); }
+        100% { opacity: 0; transform: translate(24px, 6px) rotate(240deg); }
+    }
+
+    .shell-eject-ump {
+        position: absolute; top: 68px; left: 90px; width: 3.5px; height: 2px;
+        background: #E2E8F0; border-radius: 1px; animation: shellFlyUMP 0.16s infinite 0.25s linear; opacity: 0;
+    }
+    @keyframes shellFlyUMP {
+        0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+        50% { opacity: 1; transform: translate(10px, -15px) rotate(-90deg); }
+        100% { opacity: 0; transform: translate(20px, 8px) rotate(-180deg); }
+    }
+
+    .bullet-zone {
+        position: absolute; top: 50%; left: 32%; right: 32%; height: 36px;
+        transform: translateY(-50%); pointer-events: none; overflow: visible;
+    }
+    .bullet-tracer-left {
+        position: absolute; top: 8px; left: 0; width: 45px; height: 3px;
+        background: linear-gradient(90deg, #FFFFFF, #FF5500, transparent);
+        box-shadow: 0 0 8px #FF4D00; animation: bulletShootLeft 0.16s infinite 0.2s;
+    }
+    @keyframes bulletShootLeft {
+        0% { transform: translateX(-20px); opacity: 1; }
+        100% { transform: translateX(110px); opacity: 0; }
+    }
+
+    .bullet-tracer-right {
+        position: absolute; bottom: 8px; right: 0; width: 40px; height: 3px;
+        background: linear-gradient(-90deg, #FFFFFF, #00D0FF, transparent);
+        box-shadow: 0 0 8px #00F0FF; animation: bulletShootRight 0.14s infinite 0.25s;
+    }
+    @keyframes bulletShootRight {
+        0% { transform: translateX(20px); opacity: 1; }
+        100% { transform: translateX(-110px); opacity: 0; }
+    }
+
+    .crossfire-spark {
+        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+        width: 28px; height: 28px; background: radial-gradient(circle, #FFFFFF 15%, #FFAA00 55%, transparent 80%);
+        filter: drop-shadow(0 0 10px #FF4D00); opacity: 0; animation: clashSparks 0.14s infinite 0.3s;
+    }
+    @keyframes clashSparks {
+        0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+        50% { opacity: 1; transform: translate(-50%, -50%) scale(1.6); }
+    }
+
+    .state-battle-ready {
+        animation: battleShake 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    @keyframes battleShake {
+        0%, 100% { transform: translate(0, 0); }
+        20% { transform: translate(-6px, 2px) scale(1.03); }
+        40% { transform: translate(6px, -2px) scale(1.05); }
+        60% { transform: translate(-4px, 1px); }
+        80% { transform: translate(2px, -1px); }
+    }
+
+    /* Sound BGM Button */
+    .bgm-toggle-btn {
+        position: absolute; top: 12px; right: 14px; height: 32px; padding: 0 10px;
+        background: #FFFFFF; border: 1px solid rgba(255, 77, 0, 0.3); border-radius: 20px;
+        display: flex; align-items: center; gap: 6px; cursor: pointer; z-index: 100;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: all 0.2s ease;
+    }
+    .bgm-icon { width: 14px; height: 14px; stroke: #FF4D00; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .sound-wave { display: flex; align-items: center; gap: 2px; height: 12px; }
+    .sound-wave span { width: 2px; height: 100%; background: #FF4D00; border-radius: 1px; animation: soundWaveAnim 0.8s ease-in-out infinite alternate; }
+    .sound-wave span:nth-child(2) { animation-delay: 0.2s; height: 60%; }
+    .sound-wave span:nth-child(3) { animation-delay: 0.4s; height: 80%; }
+    .bgm-toggle-btn.muted .sound-wave span { animation: none; height: 3px !important; background: #94A3B8; }
+    .bgm-toggle-btn.muted .bgm-icon { stroke: #94A3B8; }
+    @keyframes soundWaveAnim { 0% { height: 3px; } 100% { height: 12px; } }
+
+    .esports-auth-tabs {
+        display: flex; background: #F1F5F9; border-radius: 12px; padding: 4px;
+        margin: 10px 0 20px; border: 1px solid #E2E8F0; width: 100%;
+    }
+    .esports-tab-btn {
+        flex: 1; height: 40px; border: none; background: transparent; border-radius: 9px;
+        font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 1px;
+        color: #64748B; cursor: pointer; transition: all 0.25s ease;
+    }
+    .esports-tab-btn.active {
+        background: #FFFFFF; color: #FF4D00; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
     }
 </style>
 </head>
@@ -2405,109 +2736,214 @@
     </div>
 </div>
 
-<!-- AUTH VIEW (MODERN LIGHT THEME FIX) -->
+<!-- AUTH VIEW (ULTRA ESPORTS EDITION WITH AK-47 VS UMP BATTLE) -->
 <div id="auth-view">
-    <!-- Top Brand Header for Auth Pages -->
-    <div class="top-app-header">
-        <div class="top-brand">
-            <img id="auth-top-logo" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Logo">
-            <span class="top-brand-title">ST TOURNAMENT BD</span>
+    <!-- FREE FIRE NOSTALGIC AUDIO -->
+    <audio id="ffBgmAudio" loop preload="auto" playsinline autoplay>
+        <source src="https://www.image2url.com/r2/default/audio/1790787430553-6410d4d2-5acc-441b-88bb-f0e0ad52655a.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Floating Sound Controller Button -->
+    <button type="button" class="bgm-toggle-btn" id="bgmToggleBtn" onclick="window.toggleBgmSound()" title="Music On/Off">
+        <svg class="bgm-icon" viewBox="0 0 24 24">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path class="vol-wave" d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+        <div class="sound-wave">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-        <div class="top-auth-actions">
-            <button class="btn-top-auth btn-top-login" id="auth-switch-btn-login" onclick="window.toggleAuthMode('login')">Login</button>
-            <button class="btn-top-auth btn-top-reg" id="auth-switch-btn-reg" onclick="window.toggleAuthMode('register')">Register</button>
-        </div>
-    </div>
+    </button>
 
-    <!-- LOGIN FORM -->
-    <div id="login-container" class="auth-page-container">
-        <div class="auth-center-header">
-            <h2>Welcome Back!</h2>
-            <p>Sign in to your account</p>
-        </div>
-        
-        <label class="auth-input-label">Username or Email</label>
-        <div class="auth-input-wrapper">
-            <i class="far fa-user auth-input-icon-left"></i>
-            <input type="text" id="login-email" class="auth-modern-input" placeholder="Enter your username or email">
-        </div>
+    <!-- HERO & FIGHTERS ANIMATION -->
+    <section class="hero-section" id="heroSection" style="padding-top:15px;">
+        <div class="character-stage">
+            <div class="character-backdrop"></div>
+            <div class="hud-chip chip-left"><span>AK-47 DRAGON</span></div>
+            <div class="hud-chip chip-right"><span>UMP RUSHER</span></div>
 
-        <label class="auth-input-label">Password</label>
-        <div class="auth-input-wrapper">
-            <i class="fas fa-lock auth-input-icon-left"></i>
-            <input type="password" id="login-pass" class="auth-modern-input" placeholder="Enter your password">
-            <i class="fas fa-eye-slash auth-password-eye"></i>
-        </div>
+            <div class="bullet-zone">
+                <div class="bullet-tracer-left"></div>
+                <div class="bullet-tracer-right"></div>
+                <div class="crossfire-spark"></div>
+            </div>
 
-        <div style="display:flex; justify-content:flex-end; margin-top:-6px; margin-bottom:14px;">
-            <span onclick="window.forgotPassword()" style="font-size:12px; color:var(--primary); font-weight:700; cursor:pointer;">Forgot Password?</span>
-        </div>
+            <!-- 1. LEFT FIGHTER: AK-47 ASSAULT WARRIOR -->
+            <div class="fighter-ak47-box">
+                <div class="muzzle-ak"></div>
+                <div class="shell-eject-ak"></div>
+                <svg class="ak-gunner" width="145" height="175" viewBox="0 0 160 170" fill="none">
+                    <defs>
+                        <linearGradient id="akFlameGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#FF1A00"/>
+                            <stop offset="50%" stop-color="#FF6A00"/>
+                            <stop offset="100%" stop-color="#FFB700"/>
+                        </linearGradient>
+                    </defs>
+                    <ellipse cx="65" cy="158" rx="38" ry="6" fill="rgba(17,24,39,0.1)"/>
+                    <path d="M38 152 L56 106 L84 106 L98 152 L78 152 L70 122 L52 152 Z" fill="#0B132B"/>
+                    <path d="M48 82 L86 82 L90 114 L46 114 Z" fill="#1C2541"/>
+                    <polygon points="56,88 80,88 76,108 60,108" fill="#FF4D00"/>
+                    <circle cx="66" cy="58" r="16" fill="#1C2541"/>
+                    <path d="M52 52 C52 38 80 38 82 52 L84 65 L50 65 Z" fill="#0B132B"/>
+                    <rect x="68" y="55" width="15" height="5.5" rx="2" fill="#FF2A00" style="filter: drop-shadow(0 0 5px #FF2A00);"/>
+                    <path d="M52 90 L80 86 L112 76" stroke="#1C2541" stroke-width="11" stroke-linecap="round"/>
+                    <g id="akRifle" transform="translate(74, 46)">
+                        <polygon points="0,28 18,22 18,34 0,38" fill="#5C2410"/>
+                        <rect x="18" y="22" width="38" height="13" rx="2" fill="url(#akFlameGrad)"/>
+                        <line x1="20" y1="21" x2="56" y2="21" stroke="#111827" stroke-width="2.5"/>
+                        <path d="M30 35 C32 48 40 55 50 59 L44 61 C34 57 26 48 24 35 Z" fill="#FF6600"/>
+                        <rect x="56" y="24" width="24" height="9" fill="#78350F"/>
+                        <rect x="80" y="26" width="36" height="5" fill="#2B2D42"/>
+                        <line x1="108" y1="21" x2="108" y2="26" stroke="#2B2D42" stroke-width="2.5"/>
+                        <polygon points="116,25 122,23 122,32 116,30" fill="#E63946"/>
+                    </g>
+                </svg>
+            </div>
 
-        <button class="auth-primary-btn" onclick="window.emailLogin()">Sign In</button>
-
-        <div style="display:flex; align-items:center; margin: 10px 0 14px; gap: 10px;">
-            <div style="flex:1; height:1px; background:#e2e8f0;"></div>
-            <span style="font-size:11px; color:#94a3b8; font-weight:700;">অথবা</span>
-            <div style="flex:1; height:1px; background:#e2e8f0;"></div>
-        </div>
-
-        <button type="button" class="auth-google-btn" onclick="window.googleLogin()">
-            <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" style="width:18px; height:18px;">
-            <span>Continue with Google</span>
-        </button>
-
-        <div class="auth-footer-text">
-            New on our platform? <span onclick="window.toggleAuthMode('register')">Create an account</span>
-        </div>
-    </div>
-    
-    <!-- REGISTER FORM -->
-    <div id="register-container" class="auth-page-container" style="display:none;">
-        <div class="auth-center-header">
-            <h2>Create Account</h2>
-            <p>Join the tournament community</p>
-        </div>
-
-        <label class="auth-input-label">Username</label>
-        <div class="auth-input-wrapper">
-            <i class="far fa-user auth-input-icon-left"></i>
-            <input type="text" id="reg-username" class="auth-modern-input" placeholder="Enter your username">
-        </div>
-
-        <label class="auth-input-label">Email Address</label>
-        <div class="auth-input-wrapper">
-            <i class="far fa-envelope auth-input-icon-left"></i>
-            <input type="email" id="reg-email" class="auth-modern-input" placeholder="Enter your email">
-        </div>
-
-        <label class="auth-input-label">Mobile Number</label>
-        <div class="auth-input-wrapper">
-            <i class="fas fa-phone-alt auth-input-icon-left"></i>
-            <input type="tel" id="reg-phone" class="auth-modern-input" placeholder="e.g. 017xxxxxxxx">
-        </div>
-
-        <label class="auth-input-label">Password</label>
-        <div class="auth-input-wrapper">
-            <i class="fas fa-lock auth-input-icon-left"></i>
-            <input type="password" id="reg-pass" class="auth-modern-input" placeholder="Min 6 characters">
-            <i class="fas fa-eye-slash auth-password-eye"></i>
-        </div>
-
-        <button class="auth-primary-btn" onclick="window.emailRegister()">Create Account</button>
-
-        <div style="display:flex; align-items:center; margin: 10px 0 14px; gap: 10px;">
-            <div style="flex:1; height:1px; background:#e2e8f0;"></div>
-            <span style="font-size:11px; color:#94a3b8; font-weight:700;">অথবা</span>
-            <div style="flex:1; height:1px; background:#e2e8f0;"></div>
+            <!-- 2. RIGHT FIGHTER: UMP RUSHER -->
+            <div class="fighter-ump-box">
+                <div class="muzzle-ump"></div>
+                <div class="shell-eject-ump"></div>
+                <svg class="ump-gunner" width="145" height="175" viewBox="0 0 160 170" fill="none">
+                    <defs>
+                        <linearGradient id="umpCyanGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#0055FF"/>
+                            <stop offset="50%" stop-color="#00D4FF"/>
+                            <stop offset="100%" stop-color="#FFFFFF"/>
+                        </linearGradient>
+                    </defs>
+                    <ellipse cx="65" cy="158" rx="38" ry="6" fill="rgba(17,24,39,0.1)"/>
+                    <path d="M36 152 L58 108 L86 108 L104 152 L84 152 L74 124 L52 152 Z" fill="#0F172A"/>
+                    <path d="M50 82 L88 82 L92 116 L48 116 Z" fill="#1E293B"/>
+                    <polygon points="58,88 82,88 78,108 62,108" fill="#00F0FF"/>
+                    <circle cx="68" cy="60" r="16" fill="#0F172A"/>
+                    <path d="M54 52 C54 38 82 38 84 52 L86 65 L52 65 Z" fill="#1E293B"/>
+                    <rect x="70" y="56" width="15" height="5.5" rx="2" fill="#00F0FF" style="filter: drop-shadow(0 0 5px #00F0FF);"/>
+                    <path d="M54 90 L82 86 L106 80" stroke="#0F172A" stroke-width="11" stroke-linecap="round"/>
+                    <g id="umpGun" transform="translate(76, 50)">
+                        <path d="M0 22 L18 20 L18 27 L0 29 Z" fill="#334155"/>
+                        <rect x="18" y="18" width="38" height="14" rx="2" fill="url(#umpCyanGrad)"/>
+                        <rect x="20" y="14" width="30" height="3.5" fill="#1E293B"/>
+                        <polygon points="30,14 36,8 42,8 46,14" fill="#0284C7"/>
+                        <rect x="36" y="32" width="8" height="28" rx="1.5" fill="#0F172A"/>
+                        <line x1="36" y1="40" x2="44" y2="40" stroke="#00F0FF" stroke-width="2"/>
+                        <rect x="52" y="30" width="6" height="12" rx="1.5" fill="#334155"/>
+                        <rect x="56" y="22" width="20" height="5.5" fill="#1E293B"/>
+                        <rect x="76" y="21" width="5.5" height="7.5" rx="1" fill="#00F0FF"/>
+                    </g>
+                </svg>
+            </div>
         </div>
 
-        <button type="button" class="auth-google-btn" onclick="window.googleLogin()">
-            <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" style="width:18px; height:18px;">
-            <span>Continue with Google</span>
-        </button>
+        <div style="text-align: center; margin-top: 4px; margin-bottom: 10px;">
+            <div style="display:inline-flex; align-items:center; gap:6px; padding:3px 10px; background:rgba(255, 77, 0, 0.08); border:1px solid rgba(255, 77, 0, 0.2); border-radius:20px; color:#FF4D00; font-size:10px; font-weight:700; text-transform:uppercase;">
+                <span style="width:6px; height:6px; border-radius:50%; background:#FF4D00; box-shadow:0 0 6px #FF4D00;"></span>
+                <span>LIVE TOURNAMENT PLATFORM</span>
+            </div>
+            <h1 style="font-family:'Rajdhani', sans-serif; font-size:24px; font-weight:800; letter-spacing:1px; color:#111827; text-transform:uppercase; margin-top:6px;">
+                🎮 FREE FIRE <span style="background:linear-gradient(135deg, #FF4D00, #FF7A00); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">TOURNAMENT BD</span>
+            </h1>
+        </div>
+    </section>
 
-        <div class="auth-footer-text">
-            Already have an account? <span onclick="window.toggleAuthMode('login')">Sign in instead</span>
+    <!-- FORM CONTAINER -->
+    <div class="auth-page-container" style="padding-top:0;">
+        <!-- Esports Auth Switcher Tabs -->
+        <div class="esports-auth-tabs">
+            <button type="button" class="esports-tab-btn active" id="auth-switch-btn-login" onclick="window.toggleAuthMode('login')">LOGIN</button>
+            <button type="button" class="esports-tab-btn" id="auth-switch-btn-reg" onclick="window.toggleAuthMode('register')">REGISTER</button>
+        </div>
+
+        <!-- 1. LOGIN FORM -->
+        <div id="login-container">
+            <label class="auth-input-label">Username or Email</label>
+            <div class="auth-input-wrapper">
+                <i class="far fa-user auth-input-icon-left"></i>
+                <input type="text" id="login-email" class="auth-modern-input" placeholder="Enter your username or email">
+            </div>
+
+            <label class="auth-input-label">Password</label>
+            <div class="auth-input-wrapper">
+                <i class="fas fa-lock auth-input-icon-left"></i>
+                <input type="password" id="login-pass" class="auth-modern-input" placeholder="Enter your password">
+                <i class="fas fa-eye-slash auth-password-eye"></i>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:-4px; margin-bottom:14px;">
+                <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:#64748b; cursor:pointer;">
+                    <input type="checkbox" checked style="accent-color:#FF4D00;"> Remember Me
+                </label>
+                <span onclick="window.forgotPassword()" style="font-size:12px; color:#FF4D00; font-weight:700; cursor:pointer;">Forgot Password?</span>
+            </div>
+
+            <button class="auth-primary-btn" style="background:linear-gradient(135deg, #FF4D00, #FF7A00); font-family:'Rajdhani', sans-serif; font-size:17px; letter-spacing:1px;" onclick="window.emailLogin()">
+                ⚔️ ENTER TOURNAMENT
+            </button>
+
+            <div style="display:flex; align-items:center; margin: 10px 0 14px; gap: 10px;">
+                <div style="flex:1; height:1px; background:#e2e8f0;"></div>
+                <span style="font-size:11px; color:#94a3b8; font-weight:700;">অথবা</span>
+                <div style="flex:1; height:1px; background:#e2e8f0;"></div>
+            </div>
+
+            <button type="button" class="auth-google-btn" onclick="window.googleLogin()">
+                <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" style="width:18px; height:18px;">
+                <span>Continue with Google</span>
+            </button>
+
+            <div class="auth-footer-text" style="margin-top:10px;">
+                Don't have an account? <span onclick="window.toggleAuthMode('register')" style="color:#FF4D00;">Register Now</span>
+            </div>
+        </div>
+
+        <!-- 2. REGISTER FORM -->
+        <div id="register-container" style="display:none;">
+            <label class="auth-input-label">Username</label>
+            <div class="auth-input-wrapper">
+                <i class="far fa-user auth-input-icon-left"></i>
+                <input type="text" id="reg-username" class="auth-modern-input" placeholder="Enter your username">
+            </div>
+
+            <label class="auth-input-label">Email Address</label>
+            <div class="auth-input-wrapper">
+                <i class="far fa-envelope auth-input-icon-left"></i>
+                <input type="email" id="reg-email" class="auth-modern-input" placeholder="Enter your email">
+            </div>
+
+            <label class="auth-input-label">Mobile Number</label>
+            <div class="auth-input-wrapper">
+                <i class="fas fa-phone-alt auth-input-icon-left"></i>
+                <input type="tel" id="reg-phone" class="auth-modern-input" placeholder="e.g. 017xxxxxxxx">
+            </div>
+
+            <label class="auth-input-label">Password</label>
+            <div class="auth-input-wrapper">
+                <i class="fas fa-lock auth-input-icon-left"></i>
+                <input type="password" id="reg-pass" class="auth-modern-input" placeholder="Min 6 characters">
+                <i class="fas fa-eye-slash auth-password-eye"></i>
+            </div>
+
+            <button class="auth-primary-btn" style="background:linear-gradient(135deg, #FF4D00, #FF7A00); font-family:'Rajdhani', sans-serif; font-size:17px; letter-spacing:1px;" onclick="window.emailRegister()">
+                🔥 CREATE ESPORTS ID
+            </button>
+
+            <div style="display:flex; align-items:center; margin: 10px 0 14px; gap: 10px;">
+                <div style="flex:1; height:1px; background:#e2e8f0;"></div>
+                <span style="font-size:11px; color:#94a3b8; font-weight:700;">অথবা</span>
+                <div style="flex:1; height:1px; background:#e2e8f0;"></div>
+            </div>
+
+            <button type="button" class="auth-google-btn" onclick="window.googleLogin()">
+                <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" style="width:18px; height:18px;">
+                <span>Continue with Google</span>
+            </button>
+
+            <div class="auth-footer-text" style="margin-top:10px;">
+                Already have an account? <span onclick="window.toggleAuthMode('login')" style="color:#FF4D00;">Login Here</span>
+            </div>
         </div>
     </div>
 </div>
@@ -2518,10 +2954,10 @@
     <!-- SHOP -->
     <section id="tab-shop-view" class="app-section">
         <div class="shop-title">💎 Diamond Shop</div>
-        <div class="shop-balance-card">
-            <div class="shop-balance-label">Your Winning Balance</div>
+        <div class="shop-balance-card" style="background: linear-gradient(135deg, #ff5722, #e64a19); box-shadow: 0 8px 25px rgba(255,87,34,0.3);">
+            <div class="shop-balance-label">Your Available Balance</div>
             <div class="shop-balance-amount">৳ <span id="shop-balance">0</span></div>
-            <div class="shop-balance-label-small">Use your winnings to buy diamonds</div>
+            <div class="shop-balance-label-small">ডিপোজিট ও উইনিং ব্যালেন্স দিয়ে ডায়মন্ড কিনুন</div>
         </div>
         <div class="shop-package-grid" id="shop-package-grid"></div>
     </section>
@@ -3160,24 +3596,39 @@
     </div>
 
     <div id="room-modal" class="modal">
-        <div class="modal-box" style="overflow:visible;">
+        <div class="modal-box" style="overflow:visible; border-radius:18px;">
             <div style="position:relative;">
-                <div class="popup-close-btn" onclick="document.getElementById('room-modal').classList.remove('active')">X</div>
+                <div class="popup-close-btn" onclick="document.getElementById('room-modal').classList.remove('active')" style="background:#ff5722; color:white; border:2px solid white;">✕</div>
             </div>
-            <div class="popup-header-yellow">
-                <div class="popup-title">ROOM DETAILS</div>
-                <div class="popup-subtitle">Match Room Information</div>
+            <div class="popup-header-yellow" style="background: linear-gradient(135deg, #ff5722, #ff7043); color:white; padding:18px;">
+                <div class="popup-title" style="color:white; letter-spacing:1px;">⚔️ ROOM DETAILS</div>
+                <div class="popup-subtitle" style="color:rgba(255,255,255,0.85);">কপি করে গেমে গিয়ে জয়েন করুন</div>
             </div>
-            <div class="popup-content" style="text-align:center;">
-                <div style="margin-bottom:15px;">
-                    <span style="font-size:12px; color:#888;">Room ID</span><br>
-                    <span style="font-size:24px; font-weight:900; color:#333;" id="popup-room-id">--</span>
-                    <button class="am-copy-btn" style="margin:5px auto;" onclick="window.copyToClipboard('popup-room-id')">COPY</button>
+            <div class="popup-content" style="padding:20px; background:#fff;">
+                <!-- Room ID Box -->
+                <div style="background:#fff3e0; border:1px solid #ffe0b2; border-radius:12px; padding:12px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="text-align:left;">
+                        <span style="font-size:11px; font-weight:700; color:#d84315; text-transform:uppercase;">Room ID</span>
+                        <div style="font-size:20px; font-weight:900; color:#212121; letter-spacing:1px;" id="popup-room-id">--</div>
+                    </div>
+                    <button onclick="window.copyToClipboard('popup-room-id')" style="background:#ff5722; color:white; border:none; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:5px; box-shadow:0 3px 8px rgba(255,87,34,0.3);">
+                        <i class="far fa-copy"></i> COPY
+                    </button>
                 </div>
-                <div>
-                    <span style="font-size:12px; color:#888;">Password</span><br>
-                    <span style="font-size:24px; font-weight:900; color:#333;" id="popup-room-pass">--</span>
-                    <button class="am-copy-btn" style="margin:5px auto;" onclick="window.copyToClipboard('popup-room-pass')">COPY</button>
+
+                <!-- Password Box -->
+                <div style="background:#fff3e0; border:1px solid #ffe0b2; border-radius:12px; padding:12px 14px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="text-align:left;">
+                        <span style="font-size:11px; font-weight:700; color:#d84315; text-transform:uppercase;">Password</span>
+                        <div style="font-size:20px; font-weight:900; color:#212121; letter-spacing:1px;" id="popup-room-pass">--</div>
+                    </div>
+                    <button onclick="window.copyToClipboard('popup-room-pass')" style="background:#ff5722; color:white; border:none; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:5px; box-shadow:0 3px 8px rgba(255,87,34,0.3);">
+                        <i class="far fa-copy"></i> COPY
+                    </button>
+                </div>
+
+                <div style="font-size:11px; color:#757575;">
+                    * আইডি বা পাসওয়ার্ডে কোনো সমস্যা হলে অ্যাডমিনের সাথে যোগাযোগ করুন।
                 </div>
             </div>
         </div>
@@ -3192,14 +3643,44 @@
         </div>
     </div>
 
-    <!-- UID MODAL -->
+    <!-- UID MODAL (PREMIUM REDESIGNED) -->
     <div id="uid-modal" class="modal">
-        <div class="modal-box" style="max-width:400px; padding:25px;">
-            <h3 style="text-align:center; margin-bottom:15px; color:#333;">💎 Enter UID</h3>
-            <p style="text-align:center; color:#888; font-size:13px; margin-bottom:15px;">Please enter your Free Fire UID to complete the purchase</p>
-            <input type="text" id="uid-modal-input" class="uid-modal-input" placeholder="Enter Free Fire UID">
-            <button class="auth-black-btn" style="margin-top:15px;" onclick="window.confirmUidPurchase()">Confirm Purchase</button>
-            <button class="auth-black-btn" style="background:#666; margin-top:5px;" onclick="document.getElementById('uid-modal').classList.remove('active')">Cancel</button>
+        <div class="uid-modal-box">
+            <!-- Diamond Icon Badge -->
+            <div class="uid-top-badge">💎</div>
+
+            <div class="uid-modal-title">ডায়মন্ড টপ-আপ</div>
+            
+            <!-- সিলেক্টেড প্যাকেজ প্রাইস পিল -->
+            <div class="uid-pkg-pill" id="uid-modal-pkg-badge">
+                <i class="fas fa-coins"></i> <span id="uid-modal-pkg-name">Free Fire Top-Up</span>
+            </div>
+
+            <!-- UID Input Box with Icon -->
+            <div class="uid-input-wrapper">
+                <i class="fas fa-id-card uid-input-icon"></i>
+                <input type="number" id="uid-modal-input" class="uid-modal-input" placeholder="আপনার গেমের Player UID দিন" inputmode="numeric">
+            </div>
+
+            <!-- সতর্কতা ও নিয়ম বক্স -->
+            <div class="uid-notice-box">
+                <div class="uid-notice-item">
+                    <span>⚠️</span>
+                    <span><b>সতর্কতা:</b> দয়া করে আপনার গেমের প্লেয়ার UID সতর্কভাবে মিলিয়ে দিন। ভুল UID দিলে টাকা রিফান্ড হবে না।</span>
+                </div>
+                <div class="uid-notice-item">
+                    <span>⏱️</span>
+                    <span>অর্ডার সফল হওয়ার <b>৫ থেকে ১৫ মিনিটের</b> মধ্যে আইডিতে ডায়মন্ড পাঠিয়ে দেওয়া হবে।</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <button type="button" class="uid-btn-confirm" onclick="window.confirmUidPurchase()">
+                <span>💎 CONFIRM PURCHASE</span>
+            </button>
+            <button type="button" class="uid-btn-cancel" onclick="document.getElementById('uid-modal').classList.remove('active')">
+                ✕ বাতিল করুন
+            </button>
         </div>
     </div>
 
@@ -3280,6 +3761,39 @@
     let selectedPackagePrice = 0;
     let selectedAiModel = 'gemini-3.5-flash';
     let aiChatHistory = [];
+
+    // ==========================================
+    // 🤖 ৩টি আলাদা টেলিগ্রাম বট কনফিগারেশন (লাইভ কানেক্টেড)
+    // ==========================================
+    // ১. ডিপোজিট বট (সফল, পেন্ডিং ও ব্যর্থ মেসেজ)
+    const TG_DEPOSIT_BOT_TOKEN = "8648109061:AAG9eIbKxns_TbVb5lAkQwFHjp9TCKsLZjQ";
+    const TG_DEPOSIT_CHAT_ID   = "7521915505";
+
+    // ২. ডায়মন্ড টপ-আপ বট (শুধু টপ-আপ অর্ডার)
+    const TG_TOPUP_BOT_TOKEN   = "8889223297:AAHUPh9T_QYVnfo7dPB6N087xpFT2WboUNk";
+    const TG_TOPUP_CHAT_ID     = "7521915505";
+
+    // ৩. উইথড্র বট (শুধু উইথড্র রিকোয়েস্ট)
+    const TG_WITHDRAW_BOT_TOKEN = "8971436344:AAG2ln500rLD7ks_hEaLspae12THLke8hJI";
+    const TG_WITHDRAW_CHAT_ID   = "7521915505";
+
+    // টেলিগ্রাম ইনভয়েস সেন্ডার ফাংশন
+    async function sendTelegramAlert(botToken, chatId, message) {
+        if (!botToken || !chatId) return;
+        try {
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: "HTML"
+                })
+            });
+        } catch(e) {
+            console.warn("Telegram alert error:", e);
+        }
+    }
 
     // ===== EXPOSE FUNCTIONS =====
     window.emailLogin = emailLogin;
@@ -3398,23 +3912,11 @@
             const c = document.getElementById('dynamic-category-list');
             if(!c) return;
 
-            // ডাটাবেস থেকে পুরনো ডেমো ক্যাটেগরি অটো-ডিলিট
-            const demoIds = ['full_map', 'lonewolf', 'cs_clash'];
-            demoIds.forEach(demoId => {
-                const demoDoc = snapshot.docs.find(d => d.id === demoId);
-                if(demoDoc) {
-                    deleteDoc(doc(db, 'categories', demoId)).catch(console.warn);
-                }
-            });
-
             c.innerHTML = "";
             let categoryCount = 0;
 
             snapshot.forEach(docSnap => {
                 const k = docSnap.id;
-                // ডেমো ক্যাটেগরিগুলোকে ফিল্টার করে বাদ দেওয়া
-                if (demoIds.includes(k)) return;
-
                 const v = docSnap.data();
                 activeCategories[k] = v;
                 categoryCount++;
@@ -3630,11 +4132,22 @@
     }
 
     function buyTopUp(packageId, price) {
-        if(!currentUser) return Swal.fire('Error', 'Please login first', 'error');
-        if(winningBal < price) return Swal.fire('Error', 'Insufficient Winning Balance!', 'error');
+        if(!currentUser) return Swal.fire('Error', 'অনুগ্রহ করে প্রথমে লগইন করুন', 'error');
+        const totalAvailable = depositBal + winningBal;
+        if(totalAvailable < price) {
+            return Swal.fire('পর্যাপ্ত ব্যালেন্স নেই', `টপ-আপ করতে ৳${price} প্রয়োজন, আপনার মোট ব্যালেন্স আছে ৳${totalAvailable}!`, 'error');
+        }
 
         selectedPackageId = packageId;
         selectedPackagePrice = price;
+        
+        // মোডালে প্যাকেজ ও দাম সুন্দর করে দেখানো
+        const selectedPkg = topUpPackages.find(p => p.id === packageId);
+        const pkgBadge = document.getElementById('uid-modal-pkg-name');
+        if(pkgBadge) {
+            pkgBadge.innerText = selectedPkg ? `${selectedPkg.name} • ৳${price}` : `৳${price} TK`;
+        }
+
         document.getElementById('uid-modal-input').value = '';
         document.getElementById('uid-modal').classList.add('active');
     }
@@ -3645,6 +4158,7 @@
 
         const packageId = selectedPackageId;
         const price = selectedPackagePrice;
+        const totalAvailable = depositBal + winningBal;
 
         document.getElementById('uid-modal').classList.remove('active');
 
@@ -3665,14 +4179,14 @@
                         <span style="font-weight:700;">${uid}</span>
                     </div>
                     <div style="display:flex; justify-content:space-between; padding:8px 0;">
-                        <span style="color:#888;">Balance after:</span>
-                        <span style="font-weight:700; color:var(--success);">৳${winningBal - price}</span>
+                        <span style="color:#888;">বাকি ব্যালেন্স:</span>
+                        <span style="font-weight:700; color:var(--success);">৳${totalAvailable - price}</span>
                     </div>
                 </div>
             `,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#6C63FF',
+            confirmButtonColor: '#ff5722',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, Buy'
         });
@@ -3680,8 +4194,24 @@
         if(result.isConfirmed) {
             toggleLoader(true);
             try {
-                const newWinning = winningBal - price;
-                await updateDoc(doc(db, 'users', currentUser.uid), { winning: newWinning });
+                // ডিপোজিট ও উইনিং ব্যালেন্স থেকে স্মার্টভাবে টাকা কাটা (প্রথমে ডিপোজিট, বাকিটা উইনিং)
+                let d = depositBal;
+                let w = winningBal;
+                let rem = price;
+
+                if (d >= rem) {
+                    d -= rem;
+                    rem = 0;
+                } else {
+                    rem -= d;
+                    d = 0;
+                    w -= rem;
+                }
+
+                await updateDoc(doc(db, 'users', currentUser.uid), { deposit: d, winning: w });
+                depositBal = d;
+                winningBal = w;
+                document.getElementById('shop-balance').innerText = (depositBal + winningBal);
 
                 const now = new Date();
                 const orderRef = await addDoc(collection(db, 'topup_orders'), {
@@ -3708,6 +4238,24 @@
                     timestampMs: Date.now(),
                     orderId: orderRef.id
                 });
+
+                // 💎 ২ নম্বর বট: ডায়মন্ড টপ-আপ ইনভয়েস স্লিপ
+                const matchedPkg = topUpPackages.find(p => p.id === packageId);
+                const pkgName = matchedPkg ? matchedPkg.name : `Diamond Package (৳${price})`;
+                const customerName = currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'User');
+                const tgTopupInvoice = `💎 <b>NEW DIAMOND TOP-UP ORDER</b> 💎
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Customer:</b> ${customerName}
+📧 <b>Email:</b> ${currentUser.email || 'N/A'}
+🆔 <b>User UID:</b> <code>${currentUser.uid}</code>
+🎮 <b>Player Game UID:</b> <code>${uid}</code>
+📦 <b>Package:</b> ${pkgName}
+💰 <b>Price Paid:</b> ৳${price} TK
+📋 <b>Order ID:</b> <code>${orderRef.id}</code>
+⏰ <b>Time:</b> ${now.toLocaleString()}
+━━━━━━━━━━━━━━━━━━━
+<i>⚡ অনুগ্রহ করে প্লেয়ারের আইডিতে ডায়মন্ড পাঠিয়ে দিন!</i>`;
+                sendTelegramAlert(TG_TOPUP_BOT_TOKEN, TG_TOPUP_CHAT_ID, tgTopupInvoice);
 
                 toggleLoader(false);
                 Swal.fire('Order Placed!', 'Your order has been sent to admin for approval.', 'success');
@@ -3907,24 +4455,92 @@
         });
     }
 
+    function triggerCombatStrike() {
+        const heroSection = document.getElementById('heroSection');
+        if (heroSection) {
+            heroSection.classList.remove('state-battle-ready');
+            void heroSection.offsetWidth; // Force Reflow
+            heroSection.classList.add('state-battle-ready');
+            setTimeout(() => heroSection.classList.remove('state-battle-ready'), 600);
+        }
+    }
+
     function toggleAuthMode(mode) {
+        triggerCombatStrike();
         const loginCont = document.getElementById('login-container');
         const regCont = document.getElementById('register-container');
         const btnLogin = document.getElementById('auth-switch-btn-login');
         const btnReg = document.getElementById('auth-switch-btn-reg');
         
         if(mode === 'login') {
-            if(loginCont) loginCont.style.display = 'flex';
+            if(loginCont) loginCont.style.display = 'block';
             if(regCont) regCont.style.display = 'none';
-            if(btnLogin) { btnLogin.className = 'btn-top-auth btn-top-login'; }
-            if(btnReg) { btnReg.className = 'btn-top-auth btn-top-reg'; }
+            if(btnLogin) { btnLogin.className = 'esports-tab-btn active'; }
+            if(btnReg) { btnReg.className = 'esports-tab-btn'; }
         } else {
             if(loginCont) loginCont.style.display = 'none';
-            if(regCont) regCont.style.display = 'flex';
-            if(btnLogin) { btnLogin.className = 'btn-top-auth btn-top-reg'; }
-            if(btnReg) { btnReg.className = 'btn-top-auth btn-top-login'; }
+            if(regCont) regCont.style.display = 'block';
+            if(btnLogin) { btnLogin.className = 'esports-tab-btn'; }
+            if(btnReg) { btnReg.className = 'esports-tab-btn active'; }
         }
     }
+
+    /* BGM Audio Controller with 30s Auto-Stop */
+    const bgmAudio = document.getElementById('ffBgmAudio');
+    const bgmToggleBtn = document.getElementById('bgmToggleBtn');
+    let bgmAutoStopTimer = null;
+
+    // লগিন বা রেজিস্ট্রেশনের ৩০ সেকেন্ড পর অটো বন্ধ হওয়ার ফাংশন
+    function scheduleBgmAutoStop(seconds = 30) {
+        if (bgmAutoStopTimer) clearTimeout(bgmAutoStopTimer);
+        bgmAutoStopTimer = setTimeout(() => {
+            if (bgmAudio && !bgmAudio.paused) {
+                // হঠাৎ বন্ধ না হয়ে ২ সেকেন্ড ধরে সাউন্ড স্মুথলি কমে বন্ধ হবে (Smooth Fade Out)
+                let currentVol = bgmAudio.volume;
+                const fadeInterval = setInterval(() => {
+                    if (currentVol > 0.05) {
+                        currentVol -= 0.05;
+                        bgmAudio.volume = Math.max(0, currentVol);
+                    } else {
+                        clearInterval(fadeInterval);
+                        bgmAudio.pause();
+                        bgmAudio.volume = 0.65; // পরবর্তীতে আবার চালু করলে যাতে ফুল ভলিউমে বাজে
+                        if (bgmToggleBtn) bgmToggleBtn.classList.add('muted');
+                    }
+                }, 80);
+            }
+        }, seconds * 1000);
+    }
+
+    window.toggleBgmSound = function() {
+        if (!bgmAudio) return;
+        if (bgmAudio.paused) {
+            bgmAudio.volume = 0.65;
+            bgmAudio.play().then(() => {
+                if (bgmToggleBtn) bgmToggleBtn.classList.remove('muted');
+                // ম্যানুয়ালি প্লে করলেও ৩০ সেকেন্ড পর অটো বন্ধ হবে
+                scheduleBgmAutoStop(30);
+            }).catch(() => {});
+        } else {
+            bgmAudio.pause();
+            if (bgmToggleBtn) bgmToggleBtn.classList.add('muted');
+            if (bgmAutoStopTimer) clearTimeout(bgmAutoStopTimer);
+        }
+    };
+
+    // প্রথম ইউজার ক্লিকে অডিও চালু করা নিশ্চিত করার মেথড
+    function startAudioOnGesture() {
+        if (bgmAudio && bgmAudio.paused) {
+            bgmAudio.volume = 0.65;
+            bgmAudio.play().then(() => {
+                if (bgmToggleBtn) bgmToggleBtn.classList.remove('muted');
+            }).catch(() => {});
+        }
+        document.removeEventListener('click', startAudioOnGesture);
+        document.removeEventListener('touchend', startAudioOnGesture);
+    }
+    document.addEventListener('click', startAudioOnGesture, { once: true });
+    document.addEventListener('touchend', startAudioOnGesture, { once: true });
 
     async function emailLogin() {
         const inputVal = document.getElementById('login-email').value.trim();
@@ -4249,6 +4865,8 @@
         toggleLoader(false);
         if(u) {
             currentUser = u;
+            // লগইন বা রেজিস্ট্রেশন সফল হলে ৩০ সেকেন্ড পর সাউন্ড অটো বন্ধ হবে
+            scheduleBgmAutoStop(30);
             document.getElementById('profile-name').innerText = u.displayName || 'User';
             document.getElementById('profile-email').innerText = u.email;
             
@@ -4282,7 +4900,7 @@
                     document.getElementById('profile-bal-win').innerText = winningBal;
                     document.getElementById('wallet-balance-display').innerText = (depositBal + winningBal);
                     document.getElementById('withdraw-available').innerText = winningBal;
-                    document.getElementById('shop-balance').innerText = winningBal;
+                    document.getElementById('shop-balance').innerText = (depositBal + winningBal);
                     const depEl = document.getElementById('deposit-available-wallet');
                     if(depEl) depEl.innerText = depositBal;
                     const winEl = document.getElementById('withdraw-available-wallet');
@@ -4955,6 +5573,23 @@
 
                 await batch.commit();
 
+                // 💸 ৩ নম্বর বট: উইথড্র রিকোয়েস্ট ইনভয়েস স্লিপ
+                const userNameDisplay = currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'User');
+                const tgWithdrawInvoice = `💸 <b>NEW WITHDRAWAL REQUEST</b> 💸
+━━━━━━━━━━━━━━━━━━━
+👤 <b>User Name:</b> ${userNameDisplay}
+📧 <b>Email:</b> ${currentUser.email || 'N/A'}
+🆔 <b>User UID:</b> <code>${currentUser.uid}</code>
+💳 <b>Method:</b> ${method.toUpperCase()}
+📱 <b>Account Number:</b> <code>${number}</code>
+💵 <b>Withdraw Amount:</b> ৳${amount} TK
+💼 <b>Remaining Winning:</b> ৳${newWinningBal} TK
+📋 <b>Request ID:</b> <code>${reqDocRef.id}</code>
+⏰ <b>Time:</b> ${now.toLocaleString()}
+━━━━━━━━━━━━━━━━━━━
+<i>⚡ যাচাই করে একাউন্টে টাকা পাঠিয়ে দিন!</i>`;
+                sendTelegramAlert(TG_WITHDRAW_BOT_TOKEN, TG_WITHDRAW_CHAT_ID, tgWithdrawInvoice);
+
                 // লোকাল ভ্যারিয়েবল ও স্ক্রিনের টেক্সট সাথে সাথে আপডেট
                 winningBal = newWinningBal;
                 document.getElementById('withdraw-available').innerText = winningBal;
@@ -5028,6 +5663,20 @@
             ]);
 
             if (usedSnap && usedSnap.exists()) {
+                // ১ নম্বর বট: ব্যর্থ নোটিফিকেশন (ব্যবহৃত TrxID)
+                const tgFailUsed = `❌ <b>DEPOSIT FAILED (ALREADY USED)</b> ❌
+━━━━━━━━━━━━━━━━━━━
+👤 <b>User:</b> ${currentUser.displayName || 'User'}
+📧 <b>Email:</b> ${currentUser.email || 'N/A'}
+🆔 <b>User UID:</b> <code>${currentUser.uid}</code>
+💳 <b>Method:</b> ${method.toUpperCase()}
+💰 <b>Amount:</b> ৳${rawAmt} TK
+🧾 <b>TrxID:</b> <code>${cleanTrxId}</code>
+⚠️ <b>Reason:</b> এই ট্রানজেকশন আইডিটি পূর্বে ব্যবহৃত হয়ে গেছে!
+⏰ <b>Time:</b> ${new Date().toLocaleString()}
+━━━━━━━━━━━━━━━━━━━`;
+                sendTelegramAlert(TG_DEPOSIT_BOT_TOKEN, TG_DEPOSIT_CHAT_ID, tgFailUsed);
+
                 toggleLoader(false);
                 return Swal.fire({ icon:'error', title:'ব্যবহৃত ট্রানজেকশন!', text:'এই ট্রানজেকশন আইডিটি দিয়ে ইতোমধ্যে টাকা অ্যাড করা হয়ে গেছে!' });
             }
@@ -5124,6 +5773,22 @@
                 });
 
                 await batch.commit();
+
+                // ১ নম্বর বট: সফল নোটিফিকেশন (Auto Approved)
+                const tgSuccessMsg = `✅ <b>DEPOSIT SUCCESSFUL (AUTO)</b> ✅
+━━━━━━━━━━━━━━━━━━━
+👤 <b>User:</b> ${currentUser.displayName || userData.username || 'User'}
+📧 <b>Email:</b> ${currentUser.email || 'N/A'}
+🆔 <b>User UID:</b> <code>${currentUser.uid}</code>
+💳 <b>Method:</b> ${method.toUpperCase()}
+💰 <b>Added Amount:</b> ৳${rechargeAmount} TK
+🧾 <b>TrxID:</b> <code>${cleanTrxId}</code>
+🎉 <b>Status:</b> Auto Approved & Added to Wallet
+⏰ <b>Time:</b> ${now.toLocaleString()}
+━━━━━━━━━━━━━━━━━━━
+<i>🎉 টাকা সফলভাবে ইউজারের ডিপোজিট ওয়ালেটে যুক্ত হয়েছে।</i>`;
+                sendTelegramAlert(TG_DEPOSIT_BOT_TOKEN, TG_DEPOSIT_CHAT_ID, tgSuccessMsg);
+
                 depositBal = updatedDeposit;
                 delete userPaymentAttemptCounts[cleanTrxId];
 
@@ -5153,6 +5818,20 @@
 
             // ১ম ট্রাই: সাথে সাথে পপ-আপ দেবে (১ সেকেন্ডও লাগবে না)
             if (userPaymentAttemptCounts[cleanTrxId] === 1) {
+                // ১ নম্বর বট: ব্যর্থ নোটিফিকেশন (TrxID ম্যাচ করেনি)
+                const tgFailNotFound = `⚠️ <b>DEPOSIT FAILED (NOT FOUND - 1ST TRY)</b> ⚠️
+━━━━━━━━━━━━━━━━━━━
+👤 <b>User:</b> ${currentUser.displayName || userData.username || 'User'}
+📧 <b>Email:</b> ${currentUser.email || 'N/A'}
+🆔 <b>User UID:</b> <code>${currentUser.uid}</code>
+💳 <b>Method:</b> ${method.toUpperCase()}
+💰 <b>Claimed Amount:</b> ৳${rawAmt} TK
+🧾 <b>TrxID:</b> <code>${cleanTrxId}</code>
+❓ <b>Status:</b> ডাটাবেসে ট্রাঞ্জেকশন ম্যাচ করেনি (ইউজারকে রিট্রাই করতে বলা হয়েছে)
+⏰ <b>Time:</b> ${new Date().toLocaleString()}
+━━━━━━━━━━━━━━━━━━━`;
+                sendTelegramAlert(TG_DEPOSIT_BOT_TOKEN, TG_DEPOSIT_CHAT_ID, tgFailNotFound);
+
                 toggleLoader(false);
                 return Swal.fire({
                     icon: 'warning',
@@ -5199,6 +5878,22 @@
                 time: now.toLocaleString(),
                 timestampMs: Date.now()
             });
+
+            // ১ নম্বর বট: পেন্ডিং নোটিফিকেশন (এডমিন প্যানেলে যাচাই দরকার)
+            const tgPendingDep = `⏳ <b>DEPOSIT PENDING (MANUAL REVIEW)</b> ⏳
+━━━━━━━━━━━━━━━━━━━
+👤 <b>User:</b> ${currentUser.displayName || userData.username || 'User'}
+📧 <b>Email:</b> ${currentUser.email || 'N/A'}
+📱 <b>Phone:</b> ${userData.phone || 'N/A'}
+🆔 <b>User UID:</b> <code>${currentUser.uid}</code>
+💳 <b>Method:</b> ${method.toUpperCase()}
+💰 <b>Amount:</b> ৳${rawAmt} TK
+🧾 <b>TrxID:</b> <code>${cleanTrxId}</code>
+⚠️ <b>Status:</b> সার্ভার ব্যস্ত বা SMS দেরিতে আসায় পেন্ডিং জমা হয়েছে
+⏰ <b>Time:</b> ${now.toLocaleString()}
+━━━━━━━━━━━━━━━━━━━
+<i>⚡ এডমিন প্যানেল থেকে TrxID মিলিয়ে অ্যাপ্রুভ করুন!</i>`;
+            sendTelegramAlert(TG_DEPOSIT_BOT_TOKEN, TG_DEPOSIT_CHAT_ID, tgPendingDep);
 
             ['bkash', 'rocket', 'nagad'].forEach(m => {
                 const inpTrx = document.getElementById(`trx-${m}`);
@@ -5432,10 +6127,56 @@
     }
 
     // ===== UTILITY =====
-    function copyToClipboard(id) {
-        const text = document.getElementById(id).innerText;
-        navigator.clipboard.writeText(text);
-        Swal.fire({ icon:'success', title:'Copied!', text:'Copied to clipboard', timer:1500, showConfirmButton:false });
+    function copyToClipboard(idOrText) {
+        let textToCopy = '';
+        const el = document.getElementById(idOrText);
+        if (el) {
+            textToCopy = el.innerText || el.textContent;
+        } else {
+            textToCopy = idOrText;
+        }
+
+        textToCopy = (textToCopy || '').trim();
+
+        if (!textToCopy || textToCopy === '--') {
+            return Swal.fire({ icon: 'warning', title: 'খালি!', text: 'রুম বা পাসওয়ার্ড এখনো দেওয়া হয়নি', timer: 1500, showConfirmButton: false });
+        }
+
+        // আধুনিক ও ফেইল-সেফ ক্লিপবোর্ড কপি সিস্টেম
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(textToCopy).then(showSuccessAlert).catch(fallbackMethod);
+        } else {
+            fallbackMethod();
+        }
+
+        function fallbackMethod() {
+            try {
+                const tempTextArea = document.createElement("textarea");
+                tempTextArea.value = textToCopy;
+                tempTextArea.style.position = "fixed";
+                tempTextArea.style.left = "-9999px";
+                tempTextArea.style.top = "-9999px";
+                document.body.appendChild(tempTextArea);
+                tempTextArea.focus();
+                tempTextArea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+                if (successful) showSuccessAlert();
+                else throw new Error();
+            } catch (err) {
+                Swal.fire({ icon: 'info', title: 'কপি করুন', text: textToCopy });
+            }
+        }
+
+        function showSuccessAlert() {
+            Swal.fire({
+                icon: 'success',
+                title: 'কপি হয়েছে! 📋',
+                text: `${textToCopy} কপি করা হয়েছে`,
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
     }
 
     function openVideo(type) {
