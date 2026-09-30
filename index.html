@@ -240,17 +240,33 @@
         100% { transform: rotate(360deg); }
     }
 
-    /* MODERN LIGHT AUTH VIEW (AS PER SCREENSHOT 4 & 5) */
+    /* MODERN LIGHT AUTH VIEW (100% MOBILE RESPONSIVE FIX) */
+    html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
     #auth-view {
         position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background-color: #f8faff;
+        inset: 0;
+        width: 100vw;
+        max-width: 100%;
+        height: 100%;
+        background-color: #ffffff;
         z-index: 5000;
         display: none;
         flex-direction: column;
         overflow-y: auto;
+        overflow-x: hidden !important;
+        box-sizing: border-box;
         padding-bottom: 40px;
+    }
+
+    #login-container, #register-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
     }
     #auth-view.active { display: flex; }
 
@@ -2429,17 +2445,42 @@
         background-size: 24px 24px, 48px 48px, 48px 48px !important;
     }
 
+    .hero-section {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
     .character-stage {
         position: relative;
         width: 100%;
         max-width: 420px;
-        height: 220px;
+        height: 200px;
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
         margin: 0 auto;
-        overflow: visible;
+        overflow: hidden;
         padding: 0 4px;
+        box-sizing: border-box;
+    }
+
+    @media (max-width: 380px) {
+        .fighter-ak47-box, .fighter-ump-box {
+            width: 120px;
+            height: 150px;
+        }
+        .fighter-ak47-box svg, .fighter-ump-box svg {
+            width: 120px;
+            height: 150px;
+        }
+        .character-stage {
+            height: 175px;
+        }
+        .hud-chip {
+            font-size: 9px;
+            padding: 2px 6px;
+        }
     }
 
     .character-backdrop {
@@ -6500,8 +6541,14 @@
             authView.classList.add('active');
             var loginCont = document.getElementById('login-container');
             var regCont = document.getElementById('register-container');
-            if (loginCont) loginCont.style.display = 'flex';
-            if (regCont) regCont.style.display = 'none';
+            if (loginCont) {
+                loginCont.style.display = 'flex';
+                loginCont.style.flexDirection = 'column';
+            }
+            if (regCont) {
+                regCont.style.display = 'none';
+                regCont.style.flexDirection = 'column';
+            }
         }
     }, 1000);
 </script>
