@@ -4252,7 +4252,7 @@
                 await updateDoc(doc(db, 'users', currentUser.uid), { deposit: d, winning: w });
                 depositBal = d;
                 winningBal = w;
-                document.getElementById('shop-balance').innerText = (depositBal + winningBal);
+                updateAllBalanceDisplays();
 
                 const now = new Date();
                 const orderRef = await addDoc(collection(db, 'topup_orders'), {
@@ -4526,52 +4526,54 @@
         }
     }
 
-    /* BGM Audio Controller with 30s Auto-Stop */
+    /* ================= SMART BGM AUDIO CONTROLLER ================= */
     const bgmAudio = document.getElementById('ffBgmAudio');
     const bgmToggleBtn = document.getElementById('bgmToggleBtn');
-    let bgmAutoStopTimer = null;
 
-    // লগিন বা রেজিস্ট্রেশনের ৩০ সেকেন্ড পর অটো বন্ধ হওয়ার ফাংশন
-    function scheduleBgmAutoStop(seconds = 30) {
-        if (bgmAutoStopTimer) clearTimeout(bgmAutoStopTimer);
-        bgmAutoStopTimer = setTimeout(() => {
-            if (bgmAudio && !bgmAudio.paused) {
-                // হঠাৎ বন্ধ না হয়ে ২ সেকেন্ড ধরে সাউন্ড স্মুথলি কমে বন্ধ হবে (Smooth Fade Out)
-                let currentVol = bgmAudio.volume;
-                const fadeInterval = setInterval(() => {
-                    if (currentVol > 0.05) {
-                        currentVol -= 0.05;
-                        bgmAudio.volume = Math.max(0, currentVol);
-                    } else {
-                        clearInterval(fadeInterval);
-                        bgmAudio.pause();
-                        bgmAudio.volume = 0.65; // পরবর্তীতে আবার চালু করলে যাতে ফুল ভলিউমে বাজে
-                        if (bgmToggleBtn) bgmToggleBtn.classList.add('muted');
-                    }
-                }, 80);
-            }
-        }, seconds * 1000);
+    // লগিন/রেজিস্ট্রেশন পেজে আছে কিনা যাচাই করার ফাংশন
+    function isOnAuthScreen() {
+        const authView = document.getElementById('auth-view');
+        return !currentUser && authView && authView.classList.contains('active');
+    }
+
+    // সাথে সাথে অডিও সম্পূর্ণ বন্ধ ও রিস্টার্ট করার ফাংশন
+    function stopBgmSoundInstantly() {
+        if (bgmAudio) {
+            bgmAudio.pause();
+            bgmAudio.currentTime = 0;
+        }
+        if (bgmToggleBtn) bgmToggleBtn.classList.add('muted');
+    }
+
+    // শুধুমাত্র অথ পেজে থাকলে অডিও প্লে করার ফাংশন
+    function playBgmSoundIfOnAuth() {
+        const isMuted = bgmToggleBtn && bgmToggleBtn.classList.contains('muted');
+        if (isOnAuthScreen() && !isMuted && bgmAudio && bgmAudio.paused) {
+            bgmAudio.volume = 0.65;
+            bgmAudio.play().then(() => {
+                if (bgmToggleBtn) bgmToggleBtn.classList.remove('muted');
+            }).catch(() => {});
+        }
     }
 
     window.toggleBgmSound = function() {
         if (!bgmAudio) return;
         if (bgmAudio.paused) {
-            bgmAudio.volume = 0.65;
-            bgmAudio.play().then(() => {
-                if (bgmToggleBtn) bgmToggleBtn.classList.remove('muted');
-                // ম্যানুয়ালি প্লে করলেও ৩০ সেকেন্ড পর অটো বন্ধ হবে
-                scheduleBgmAutoStop(30);
-            }).catch(() => {});
+            if (isOnAuthScreen()) {
+                bgmAudio.volume = 0.65;
+                bgmAudio.play().then(() => {
+                    if (bgmToggleBtn) bgmToggleBtn.classList.remove('muted');
+                }).catch(() => {});
+            }
         } else {
             bgmAudio.pause();
             if (bgmToggleBtn) bgmToggleBtn.classList.add('muted');
-            if (bgmAutoStopTimer) clearTimeout(bgmAutoStopTimer);
         }
     };
 
-    // প্রথম ইউজার ক্লিকে অডিও চালু করা নিশ্চিত করার মেথড
+    // প্রথম ইউজার ক্লিকে অডিও চালু (শুধুমাত্র যদি লগিন স্ক্রিনে থাকে)
     function startAudioOnGesture() {
-        if (bgmAudio && bgmAudio.paused) {
+        if (isOnAuthScreen() && bgmAudio && bgmAudio.paused) {
             bgmAudio.volume = 0.65;
             bgmAudio.play().then(() => {
                 if (bgmToggleBtn) bgmToggleBtn.classList.remove('muted');
@@ -4582,6 +4584,23 @@
     }
     document.addEventListener('click', startAudioOnGesture, { once: true });
     document.addEventListener('touchend', startAudioOnGesture, { once: true });
+
+    // 📱 অ্যাপ বা ব্রাউজার মিনিমাইজ করলে অডিও পজ এবং পুনরায় আসলে প্লে করার ইভেন্ট
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            // মিনিমাইজ বা অন্য অ্যাপে গেলে সাথে সাথে পজ
+            if (bgmAudio && !bgmAudio.paused) {
+                bgmAudio.pause();
+            }
+        } else {
+            // ব্যাকগ্রাউন্ড থেকে ফিরে আসলে শুধুমাত্র লগিন পেজে থাকলেই রিজ্যুম হবে
+            if (isOnAuthScreen()) {
+                playBgmSoundIfOnAuth();
+            } else {
+                stopBgmSoundInstantly();
+            }
+        }
+    });
 
     async function emailLogin() {
         const inputVal = document.getElementById('login-email').value.trim();
@@ -4906,8 +4925,8 @@
         toggleLoader(false);
         if(u) {
             currentUser = u;
-            // লগইন বা রেজিস্ট্রেশন সফল হলে ৩০ সেকেন্ড পর সাউন্ড অটো বন্ধ হবে
-            scheduleBgmAutoStop(30);
+            // লগইন বা রেজিস্ট্রেশন সফল হওয়ার সাথে সাথেই সাউন্ড ইনস্ট্যান্ট অফ হবে
+            stopBgmSoundInstantly();
             document.getElementById('profile-name').innerText = u.displayName || 'User';
             document.getElementById('profile-email').innerText = u.email;
             
@@ -4932,25 +4951,30 @@
             calculateJoinedMatches();
             loadNotifsBadge();
             
-            onSnapshot(doc(db, 'users', u.uid), snap => {
-                if(snap.exists()) {
-                    const d = snap.data();
-                    depositBal = parseFloat(d.deposit) || 0;
-                    winningBal = parseFloat(d.winning) || 0;
-                    document.getElementById('profile-bal-dep').innerText = depositBal;
-                    document.getElementById('profile-bal-win').innerText = winningBal;
-                    document.getElementById('wallet-balance-display').innerText = (depositBal + winningBal);
-                    document.getElementById('withdraw-available').innerText = winningBal;
-                    document.getElementById('shop-balance').innerText = (depositBal + winningBal);
-                    const depEl = document.getElementById('deposit-available-wallet');
-                    if(depEl) depEl.innerText = depositBal;
-                    const winEl = document.getElementById('withdraw-available-wallet');
-                    if(winEl) winEl.innerText = winningBal;
-                    if(d.phone) document.getElementById('ep-phone').value = d.phone;
-                }
-            }, err => {
-                console.warn("User profile realtime sync error:", err);
-            });
+            // সকল স্ক্রিনে একযোগে রিয়েলটাইম ব্যালেন্স আপডেট ফাংশন
+    function updateAllBalanceDisplays() {
+        const total = Number((depositBal + winningBal).toFixed(2));
+        const pDep = document.getElementById('profile-bal-dep'); if(pDep) pDep.innerText = depositBal.toFixed(2);
+        const pWin = document.getElementById('profile-bal-win'); if(pWin) pWin.innerText = winningBal.toFixed(2);
+        const wDisp = document.getElementById('wallet-balance-display'); if(wDisp) wDisp.innerText = total.toFixed(2);
+        const wAvail = document.getElementById('withdraw-available'); if(wAvail) wAvail.innerText = winningBal.toFixed(2);
+        const sBal = document.getElementById('shop-balance'); if(sBal) sBal.innerText = total.toFixed(2);
+        const depEl = document.getElementById('deposit-available-wallet'); if(depEl) depEl.innerText = depositBal.toFixed(2);
+        const winEl = document.getElementById('withdraw-available-wallet'); if(winEl) winEl.innerText = winningBal.toFixed(2);
+        const topHeadBal = document.getElementById('top-header-bal'); if(topHeadBal) topHeadBal.innerText = total.toFixed(2);
+    }
+
+    onSnapshot(doc(db, 'users', u.uid), snap => {
+        if(snap.exists()) {
+            const d = snap.data();
+            depositBal = parseFloat(d.deposit) || 0;
+            winningBal = parseFloat(d.winning) || 0;
+            updateAllBalanceDisplays();
+            if(d.phone) document.getElementById('ep-phone').value = d.phone;
+        }
+    }, err => {
+        console.warn("User profile realtime sync error:", err);
+    });
             hideSplash();
         } else {
             currentUser = null;
@@ -4965,6 +4989,8 @@
             document.getElementById('auth-view').classList.add('active');
             toggleAuthMode('login');
             hideSplash();
+            // লগআউট হয়ে লগিন পেজে ফিরলে পুনরায় সাউন্ড রেডি হবে
+            playBgmSoundIfOnAuth();
         }
     });
 
@@ -5318,8 +5344,8 @@
     }
 
     function prepJoin(id) {
-        if(!currentUser) return Swal.fire('Error', 'Please login first', 'error');
-        if(userJoinedMatches.includes(id)) return Swal.fire({ icon:'warning', title:'Already Joined', text:'You have already joined this match!' });
+        if(!currentUser) return Swal.fire('ত্রুটি', 'অনুগ্রহ করে প্রথমে লগইন করুন', 'error');
+        if(userJoinedMatches.includes(id)) return Swal.fire({ icon:'warning', title:'ইতোমধ্যে জয়েন করা আছে', text:'আপনি ইতোমধ্যে এই ম্যাচে জয়েন করেছেন!' });
         
         const match = rawMatches.find(x => x.dbKey === id);
         if(!match) return;
@@ -5329,15 +5355,16 @@
         if(typeStr.includes('duo')) slots = 2;
         if(typeStr.includes('squad')) slots = 4;
 
-        const joined = match.joined || 0;
-        const total = match.total || 48;
+        const joined = parseInt(match.joined) || 0;
+        const total = parseInt(match.total) || 48;
         
         if(joined + slots > total) {
-            return Swal.fire({ icon:'error', title:'Not Enough Slots', text:`This match has only ${Math.max(0, total - joined)} spot(s) left!` });
+            return Swal.fire({ icon:'error', title:'স্লট খালি নেই', text:`এই ম্যাচে মাত্র ${Math.max(0, total - joined)}টি স্লট বাকি আছে!` });
         }
         
         currentJoinId = id;
-        currentEntryFee = match.entry || 0;
+        // যে কোনো টেক্সট বা 'TK' রিমুভ করে নিশ্চিত নম্বর বের করা
+        currentEntryFee = parseFloat(String(match.entry || 0).replace(/[^0-9.]/g, '')) || 0;
         
         const rulesContainer = document.getElementById('join-rules-container');
         const rulesList = document.getElementById('join-rules-list');
@@ -5356,16 +5383,17 @@
         document.getElementById('join-page-title').innerText = match.title || "Match Joining";
         document.getElementById('join-page-meta').innerText = match.time || new Date().toLocaleDateString();
         document.getElementById('join-page-win').innerText = match.total_prize || 0;
-        document.getElementById('join-page-fee').innerText = match.entry || 0;
+        document.getElementById('join-page-fee').innerText = currentEntryFee;
         document.getElementById('join-page-type').innerText = match.type || 'Solo';
         
         const ic = document.getElementById('join-inputs-container');
         ic.innerHTML = "";
         for(let i=1; i<=slots; i++) {
-            ic.innerHTML += `<input type="text" class="join-input p-name" placeholder="Player ${i} Game ID">`;
+            ic.innerHTML += `<input type="text" class="join-input p-name" placeholder="Player ${i} Game ID / Name">`;
         }
         
-        document.querySelector('.join-btn-full').dataset.key = id;
+        const joinBtn = document.querySelector('.join-btn-full');
+        if(joinBtn) joinBtn.dataset.key = id;
 
         document.querySelectorAll('.app-section').forEach(e => e.classList.remove('active'));
         document.body.classList.add('sub-page');
@@ -5384,77 +5412,154 @@
         }
     }
 
+    // ১০০% গ্যারান্টি সহ ডিপোজিট ও উইনিং উভয় ব্যালেন্স থেকে টাকা কাটার সমাধান
     async function confirmJoin() {
         if(!currentUser) return Swal.fire('Error', 'Please login first', 'error');
-        if(userJoinedMatches.includes(currentJoinId)) return Swal.fire({ icon:'warning', title:'Already Joined', text:'You have already joined this match!' });
+        if(userJoinedMatches.includes(currentJoinId)) {
+            return Swal.fire({ icon:'warning', title:'Already Joined', text:'আপনি ইতোমধ্যে এই ম্যাচে জয়েন করেছেন!' });
+        }
 
         const inps = document.querySelectorAll('.p-name');
-        let count = 0;
         let names = [];
         inps.forEach(i => { 
-            if(i.value && i.value.trim()) { 
-                count++; 
-                names.push(i.value.trim()); 
-            } 
+            const val = (i.value || '').trim();
+            if(val) names.push(val);
         });
-        if(count !== inps.length) return Swal.fire('Error', "Please fill all player names", 'error');
+
+        if(names.length !== inps.length) {
+            return Swal.fire('সতর্কতা', 'অনুগ্রহ করে সকল প্লেয়ারের ইন-গেম নাম বা আইডি লিখুন!', 'warning');
+        }
         
-        const total = currentEntryFee * count;
-        if((depositBal + winningBal) < total) return Swal.fire('Error', "Insufficient Balance", 'error');
-        
-        const key = document.querySelector('.join-btn-full').dataset.key;
-        let d = depositBal, w = winningBal;
-        let rem = total;
-        if(d >= rem) { d -= rem; rem = 0; }
-        else { rem -= d; d = 0; w -= rem; }
-        
+        const count = names.length;
+        const totalFee = Number(((parseFloat(currentEntryFee) || 0) * count).toFixed(2));
+
         toggleLoader(true);
+
         try {
-            const matchDocSnap = await getDoc(doc(db, 'matches', key));
-            const matchData = matchDocSnap.data() || {};
-            const cur = matchData.joined || 0;
-            const totalMax = matchData.total || 48;
-            
-            if (cur + count > totalMax) {
+            // ১. ফায়ারবেস থেকে সরাসরি লেটেস্ট ইউজার ডাটা ফেচ (রিয়েলটাইম ব্যালেন্স যাচাই)
+            const userRef = doc(db, 'users', currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            if(!userSnap.exists()) {
                 toggleLoader(false);
-                return Swal.fire('Error', 'Sorry, slots filled up just now!', 'error');
+                return Swal.fire('Error', 'ইউজার অ্যাকাউন্ট ডাটা পাওয়া যায়নি!', 'error');
             }
 
-            await updateDoc(doc(db, 'users', currentUser.uid), { deposit: d, winning: w });
-            
-            for(let n of names) {
-                await addDoc(collection(db, 'match_participants'), {
-                    matchId: currentJoinId,
-                    ign: n,
-                    joinedBy: currentUser.uid,
-                    kills: 0,
-                    win: 0,
-                    joinedAt: serverTimestamp()
+            const userData = userSnap.data();
+            let liveDeposit = parseFloat(userData.deposit) || 0;
+            let liveWinning = parseFloat(userData.winning) || 0;
+            let totalAvailable = Number((liveDeposit + liveWinning).toFixed(2));
+
+            // ২. মোট ব্যালেন্স (ডিপোজিট + উইনিং) চেক
+            if(totalAvailable < totalFee) {
+                toggleLoader(false);
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'পর্যাপ্ত ব্যালেন্স নেই!',
+                    html: `ম্যাচে জয়েন করতে প্রয়োজন: <b>৳${totalFee}</b><br>আপনার মোট ব্যালেন্স আছে: <b>৳${totalAvailable}</b><br><small style="color:#64748b;">(ডিপোজিট: ৳${liveDeposit} | উইনিং: ৳${liveWinning})</small><br><br>দয়া করে ডিপোজিট করুন বা কম স্লট সিলেক্ট করুন।`
                 });
             }
-            
-            await updateDoc(doc(db, 'matches', key), { joined: cur + count });
-            
-            await addDoc(collection(db, 'transactions'), {
+
+            // ৩. ম্যাচ স্লট চেক
+            const targetMatchId = currentJoinId;
+            const matchRef = doc(db, 'matches', targetMatchId);
+            const matchSnap = await getDoc(matchRef);
+            if(!matchSnap.exists()) {
+                toggleLoader(false);
+                return Swal.fire('Error', 'ম্যাচটি পাওয়া যায়নি বা মুছে ফেলা হয়েছে!', 'error');
+            }
+
+            const matchData = matchSnap.data() || {};
+            const curJoined = parseInt(matchData.joined) || 0;
+            const totalMax = parseInt(matchData.total) || 48;
+
+            if(curJoined + count > totalMax) {
+                toggleLoader(false);
+                return Swal.fire('স্লট পূর্ণ', `দুঃখিত, এই ম্যাচে মাত্র ${Math.max(0, totalMax - curJoined)}টি স্লট বাকি আছে!`, 'error');
+            }
+
+            // ৪. স্মার্ট ডিডাকশন (আগে ডিপোজিট ব্যালেন্স থেকে কাটা হবে, বাকিটা উইনিং ব্যালেন্স থেকে)
+            let newDeposit = liveDeposit;
+            let newWinning = liveWinning;
+            let rem = totalFee;
+
+            if (newDeposit >= rem) {
+                newDeposit = Number((newDeposit - rem).toFixed(2));
+                rem = 0;
+            } else {
+                rem = Number((rem - newDeposit).toFixed(2));
+                newDeposit = 0;
+                newWinning = Number(Math.max(0, newWinning - rem).toFixed(2));
+                rem = 0;
+            }
+
+            // ৫. ফায়ারবেস ব্যাচ রাইট (একসাথে টাকা কাটা, ম্যাচ কাউন্ট বৃদ্ধি ও ট্রানজেকশন তৈরি)
+            const batch = writeBatch(db);
+
+            batch.update(userRef, { 
+                deposit: newDeposit, 
+                winning: newWinning 
+            });
+
+            batch.update(matchRef, { 
+                joined: curJoined + count 
+            });
+
+            const now = new Date();
+            const txDocRef = doc(collection(db, 'transactions'));
+            batch.set(txDocRef, {
                 userId: currentUser.uid,
-                type: 'Match Join',
-                amount: total,
-                method: 'Wallet',
+                type: `Match Join (${matchData.title || 'Match'})`,
+                amount: totalFee,
+                method: 'Wallet (Dep+Win)',
                 status: 'Success',
-                date: new Date().toLocaleString(),
+                matchId: targetMatchId,
+                players: names.join(', '),
+                date: now.toLocaleString(),
                 timestampMs: Date.now()
             });
-            
-            if(!userJoinedMatches.includes(currentJoinId)) userJoinedMatches.push(currentJoinId);
+
+            await batch.commit();
+
+            // ৬. পার্টিসিপেন্ট টেবিলে সকল প্লেয়ারের নাম যুক্ত করা
+            for(let n of names) {
+                await addDoc(collection(db, 'match_participants'), {
+                    matchId: targetMatchId,
+                    ign: n,
+                    joinedBy: currentUser.uid,
+                    userName: currentUser.displayName || userData.username || 'User',
+                    kills: 0,
+                    win: 0,
+                    joinedAt: serverTimestamp(),
+                    timestampMs: Date.now()
+                });
+            }
+
+            // ৭. লোকাল ভ্যারিয়েবল ও ইন্টারফেস রিয়েলটাইমে আপডেট
+            depositBal = newDeposit;
+            winningBal = newWinning;
+            updateAllBalanceDisplays();
+
+            if(!userJoinedMatches.includes(targetMatchId)) {
+                userJoinedMatches.push(targetMatchId);
+            }
             filterMatchTab(currentMatchFilter);
-            
+
             toggleLoader(false);
-            Swal.fire('Joined!', 'You have successfully joined the match.', 'success').then(() => {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'ম্যাচে জয়েন সফল হয়েছে! 🎮',
+                html: `আপনার অ্যাকাউন্ট থেকে <b>৳${totalFee}</b> কেটে নেওয়া হয়েছে।<br>বাকি ব্যালেন্স: <b>৳${(newDeposit + newWinning).toFixed(2)}</b>`,
+                confirmButtonColor: '#ff5722',
+                confirmButtonText: 'ঠিক আছে'
+            }).then(() => {
                 closeJoinPage();
             });
+
         } catch(e) {
             toggleLoader(false);
-            Swal.fire('Error', e.message, 'error');
+            console.error("Match join error:", e);
+            Swal.fire('Error', e.message || 'ম্যাচে জয়েন করতে সমস্যা হয়েছে', 'error');
         }
     }
 
