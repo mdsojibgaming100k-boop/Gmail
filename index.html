@@ -5870,30 +5870,45 @@
     async function checkReaderAppStatus() {
         toggleLoader(true);
         try {
-            // reader_status অথবা XNXANIKPAY ডাটাবেস থেকে সার্বক্ষণিক সার্ভার ট্র্যাকিং
             let isOnline = false;
-            let lastPingText = "কয়েক সেকেন্ড আগে";
+            let lastPingText = "কখনো সংযোগ হয়নি";
+            let rawTime = 0;
 
+            // ১. সরাসরি reader_status/device থেকে শেষ পিং রিড করা
             try {
                 const statusSnap = await getDoc(doc(db, 'reader_status', 'device'));
                 if (statusSnap.exists()) {
                     const d = statusSnap.data();
-                    const lastSeen = Number(d.lastSeen || d.timestampMs || 0);
-                    if (Date.now() - lastSeen < 180000) {
-                        isOnline = true;
-                        lastPingText = Math.max(1, Math.floor((Date.now() - lastSeen) / 1000)) + " সেকেন্ড আগে";
-                    }
+                    rawTime = Number(d.lastSeen || d.lastPing || d.timestampMs || d.timestamp || 0);
                 }
-            } catch(e){}
+            } catch(e) {}
 
-            if (!isOnline) {
-                const q = query(collection(db, 'XNXANIKPAY'), limit(1));
-                const snap = await getDocs(q);
-                if (!snap.empty) {
-                    isOnline = true;
-                    const docData = snap.docs[0].data();
-                    lastPingText = docData.time || docData.date || "অ্যাক্টিভ ও সিঙ্কড";
-                }
+            // ২. ফলব্যাক হিসেবে XNXANIKPAY/DEVICE_PING থেকে চেক করা
+            if (rawTime === 0) {
+                try {
+                    const pingSnap = await getDoc(doc(db, 'XNXANIKPAY', 'DEVICE_PING'));
+                    if (pingSnap.exists()) {
+                        const d = pingSnap.data();
+                        rawTime = Number(d.lastSeen || d.lastPing || d.timestampMs || d.timestamp || 0);
+                    }
+                } catch(e) {}
+            }
+
+            // ১০ ডিজিটের সেকেন্ড থাকলে ১৩ ডিজিটের মিলিসেকেন্ডে রূপান্তর
+            if (rawTime > 0 && rawTime < 10000000000) {
+                rawTime = rawTime * 1000;
+            }
+
+            const now = Date.now();
+            const diffSec = rawTime > 0 ? Math.floor((now - rawTime) / 1000) : 999999;
+
+            // ৯০ সেকেন্ডের মধ্যে পিং আসলেই শুধু অনলাইন, না আসলে নিশ্চিত অফলাইন
+            if (rawTime > 0 && diffSec <= 90) {
+                isOnline = true;
+                lastPingText = diffSec <= 5 ? "এইমাত্র (সরাসরি সিঙ্কড)" : `${diffSec} সেকেন্ড আগে`;
+            } else if (rawTime > 0) {
+                const diffMin = Math.floor(diffSec / 60);
+                lastPingText = diffMin < 60 ? `${diffMin} মিনিট আগে` : `${Math.floor(diffMin / 60)} ঘণ্টা আগে`;
             }
 
             const statusTextEl = document.getElementById('modal-reader-status-text');
@@ -5903,24 +5918,48 @@
             const quickTextEl = document.getElementById('user-side-server-quick-status');
 
             if (isOnline) {
-                if(statusTextEl) { statusTextEl.innerText = "🟢 ONLINE & ACTIVE (অটো ডিপোজিট চালু)"; statusTextEl.style.color = "#22c55e"; }
-                if(iconEl) iconEl.style.color = "#22c55e";
-                if(dotEl) { dotEl.style.background = "#22c55e"; dotEl.style.boxShadow = "0 0 10px #22c55e"; }
-                if(quickTextEl) { quickTextEl.innerText = "অনলাইন ও সক্রিয়"; quickTextEl.style.color = "#22c55e"; }
+                if (statusTextEl) { 
+                    statusTextEl.innerText = "🟢 ONLINE & ACTIVE (অটো ডিপোজিট চালু)"; 
+                    statusTextEl.style.color = "#22c55e"; 
+                }
+                if (iconEl) iconEl.style.color = "#22c55e";
+                if (dotEl) { 
+                    dotEl.style.background = "#22c55e"; 
+                    dotEl.style.boxShadow = "0 0 10px #22c55e"; 
+                }
+                if (quickTextEl) { 
+                    quickTextEl.innerText = "অনলাইন ও সক্রিয়"; 
+                    quickTextEl.style.color = "#22c55e"; 
+                }
             } else {
-                if(statusTextEl) { statusTextEl.innerText = "🟡 STANDBY / MANUAL QUEUE"; statusTextEl.style.color = "#eab308"; }
-                if(iconEl) iconEl.style.color = "#eab308";
-                if(dotEl) { dotEl.style.background = "#eab308"; dotEl.style.boxShadow = "0 0 10px #eab308"; }
-                if(quickTextEl) { quickTextEl.innerText = "স্ট্যান্ডবাই / ম্যানুয়াল কিউ"; quickTextEl.style.color = "#eab308"; }
+                if (statusTextEl) { 
+                    statusTextEl.innerText = "🔴 OFFLINE / MANUAL QUEUE (সার্ভার অফলাইন)"; 
+                    statusTextEl.style.color = "#ef4444"; 
+                }
+                if (iconEl) iconEl.style.color = "#ef4444";
+                if (dotEl) { 
+                    dotEl.style.background = "#ef4444"; 
+                    dotEl.style.boxShadow = "0 0 10px #ef4444"; 
+                }
+                if (quickTextEl) { 
+                    quickTextEl.innerText = "অফলাইন / ম্যানুয়াল কিউ"; 
+                    quickTextEl.style.color = "#ef4444"; 
+                }
             }
 
-            if(lastPingEl) lastPingEl.innerText = lastPingText;
+            if (lastPingEl) lastPingEl.innerText = lastPingText;
 
             toggleLoader(false);
             document.getElementById('reader-status-modal').classList.add('active');
         } catch (err) {
             toggleLoader(false);
-            Swal.fire('সার্ভার হেলথ', 'পেমেন্ট গেটওয়ে সার্ভার সম্পূর্ণ স্বাভাবিক ও সক্রিয় আছে।', 'info');
+            const statusTextEl = document.getElementById('modal-reader-status-text');
+            const dotEl = document.getElementById('reader-live-dot');
+            const quickTextEl = document.getElementById('user-side-server-quick-status');
+            if (statusTextEl) { statusTextEl.innerText = "🔴 OFFLINE"; statusTextEl.style.color = "#ef4444"; }
+            if (dotEl) { dotEl.style.background = "#ef4444"; dotEl.style.boxShadow = "0 0 8px #ef4444"; }
+            if (quickTextEl) { quickTextEl.innerText = "অফলাইন"; quickTextEl.style.color = "#ef4444"; }
+            document.getElementById('reader-status-modal').classList.add('active');
         }
     }
 
