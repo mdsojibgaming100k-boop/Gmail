@@ -3989,19 +3989,57 @@
     // ============================================================
     // 🔔 PUSHWOOSH & CHROME NATIVE NOTIFICATION PROMPT ENGINE
     // ============================================================
-    let pushwooshAppCode = "6E794-D970B";
+    let pushwooshAppCode = "D6B35-91BAF";
 
+    // পুশউশ ইঞ্জিন স্টার্টআপ ফাংশন (স্বয়ংক্রিয় সিঙ্ক ও ডিভাইস রেজিস্ট্রেশন)
+    function syncAndInitPushwoosh(code) {
+        const targetCode = code || pushwooshAppCode || "D6B35-91BAF";
+        const deviceApiToken = "2seNAE74alOrApyG002oRCSbj8eusvgpF5f8rNsWvBlKe8oCEhuMkaJ5oau9YMFmRTM6IlwV0J4eZy9o2JEG";
+
+        try {
+            window.Pushwoosh = window.Pushwoosh || [];
+            window.Pushwoosh.push(['init', {
+                apiToken: deviceApiToken,
+                applicationCode: targetCode,
+                defaultNotificationTitle: 'ST TOURNAMENT BD',
+                autoSubscribe: true,
+                subscribeWidget: {
+                    enable: false
+                }
+            }]);
+
+            if ("Notification" in window && Notification.permission === "granted") {
+                window.Pushwoosh.push(['register']);
+            }
+        } catch(e) {
+            console.warn("Pushwoosh initialization error:", e);
+        }
+    }
+
+    // ফায়ারবেস থেকে লাইভ কোড সিঙ্ক
     onSnapshot(doc(db, 'app_settings', 'pushwoosh_config'), snap => {
         if(snap.exists()) {
             const d = snap.data();
-            if(d.app_code) pushwooshAppCode = d.app_code;
+            if(d.app_code && d.app_code.trim()) {
+                pushwooshAppCode = d.app_code.trim();
+                syncAndInitPushwoosh(pushwooshAppCode);
+            }
+        } else {
+            syncAndInitPushwoosh("D6B35-91BAF");
         }
     });
+
+    // পেজ লোড হলেই পুশউশ স্টার্ট
+    syncAndInitPushwoosh("D6B35-91BAF");
 
     // মিষ্টি বাংলা নোটিফিকেশন ভয়েস সহ পপ-আপ
     function checkAndShowPushPermissionModal() {
         if (!("Notification" in window)) return;
-        if (Notification.permission === "granted" || Notification.permission === "denied") return;
+        if (Notification.permission === "granted") {
+            syncAndInitPushwoosh(pushwooshAppCode);
+            return;
+        }
+        if (Notification.permission === "denied") return;
 
         const hasDismissed = sessionStorage.getItem('push_modal_dismissed');
         if (hasDismissed) return;
@@ -4024,7 +4062,7 @@
         sessionStorage.setItem('push_modal_dismissed', 'true');
     };
 
-    // ক্রোমের ১ লাইনের Allow/Block ডায়ালগ সক্রিয় করা ও Pushwoosh সার্ভিস সিঙ্ক
+    // ক্রোমের ১ লাইনের Allow/Block ডায়ালগ সক্রিয় করা ও Pushwoosh ডিভাইস রেজিস্ট্রেশন
     window.requestChromeNotificationWithUserGesture = async function() {
         const modal = document.getElementById('push-permission-popup');
         if (modal) modal.classList.remove('active');
@@ -4043,15 +4081,8 @@
 
             const permission = await Notification.requestPermission();
             if (permission === "granted") {
+                syncAndInitPushwoosh(pushwooshAppCode);
                 window.Pushwoosh = window.Pushwoosh || [];
-                window.Pushwoosh.push(['init', {
-                    applicationCode: pushwooshAppCode,
-                    defaultNotificationTitle: 'ST TOURNAMENT BD',
-                    autoSubscribe: true,
-                    subscribeWidget: {
-                        enable: true
-                    }
-                }]);
                 window.Pushwoosh.push(['register']);
 
                 // ফায়ারবেসেও পারমিশন রেজিস্টার
