@@ -3869,8 +3869,30 @@
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- PUSHWOOSH WEB PUSH SDK LOADER -->
+<!-- PUSHWOOSH WEB PUSH SDK & AUTO-REGISTRATION ENGINE -->
 <script src="https://cdn.pushwoosh.com/webpush/v3/pushwoosh-web-notifications.js" async></script>
+<script>
+    var Pushwoosh = window.Pushwoosh = window.Pushwoosh || [];
+    Pushwoosh.push(['init', {
+        logLevel: 'debug',
+        applicationCode: 'D6B35-91BAF',
+        apiToken: '2seNAE74alOrApyG002oRCSbj8eusvgpF5f8rNsWvBlKe8oCEhuMkaJ5oau9YMFmRTM6IlwV0J4eZy9o2JEG',
+        defaultNotificationTitle: 'ST TOURNAMENT BD',
+        autoSubscribe: true
+    }]);
+
+    // সফলভাবে ডিভাইস রেজিস্টার হলে স্ক্রিনে জানিয়ে দেবে
+    Pushwoosh.push(['on', 'subscribe', function(res) {
+        console.log("Pushwoosh Registered:", res);
+        alert("🎉 অভিনন্দন! আপনার ডিভাইস সফলভাবে Pushwoosh-এ রেজিস্টার হয়েছে!");
+    }]);
+
+    // কোনো এরর থাকলে স্ক্রিনে সতর্কবার্তা দেবে
+    Pushwoosh.push(['on', 'error', function(err) {
+        console.error("Pushwoosh Error:", err);
+        alert("⚠️ Pushwoosh Error: " + (err.message || JSON.stringify(err)));
+    }]);
+</script>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
