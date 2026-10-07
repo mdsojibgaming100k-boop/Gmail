@@ -417,8 +417,8 @@
 
     /* SHOP - TOP-UP */
     #tab-shop-view {
-        background: white;
-        padding: 20px;
+        background: #f8fafc;
+        padding: 20px 14px 40px;
         display: none;
         flex-direction: column;
         align-items: center;
@@ -429,105 +429,381 @@
     }
 
     .shop-title {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 900;
-        color: #333;
-        margin-bottom: 20px;
+        color: #1e293b;
+        margin-bottom: 16px;
         text-align: center;
         width: 100%;
     }
 
     .shop-balance-card {
-        background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-        border-radius: 16px;
+        background: linear-gradient(135deg, #ff5722, #e64a19);
+        border-radius: 18px;
         padding: 20px;
         width: 100%;
-        max-width: 400px;
+        max-width: 450px;
         margin-bottom: 20px;
         color: white;
         text-align: center;
-        border: 1px solid rgba(255,215,0,0.1);
+        box-shadow: 0 10px 25px rgba(255, 87, 34, 0.28);
     }
 
     .shop-balance-label {
-        font-size: 14px;
-        opacity: 0.8;
+        font-size: 13px;
+        opacity: 0.9;
+        font-weight: 600;
     }
 
     .shop-balance-amount {
         font-size: 32px;
-        font-weight: 800;
-        margin-top: 5px;
-        color: #ffd700;
+        font-weight: 900;
+        margin-top: 4px;
+        color: #ffffff;
     }
 
     .shop-balance-label-small {
-        font-size: 12px;
-        opacity: 0.6;
-        margin-top: 5px;
+        font-size: 11px;
+        opacity: 0.85;
+        margin-top: 4px;
     }
 
     .shop-package-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 15px;
+        gap: 12px;
         width: 100%;
-        max-width: 400px;
+        max-width: 450px;
+        margin-bottom: 22px;
     }
 
     .shop-package-card {
-        background: #f8f9fa;
-        border-radius: 12px;
-        padding: 16px;
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 14px 10px;
         text-align: center;
-        border: 1px solid #eee;
-        transition: all 0.3s;
+        border: 2px solid #e2e8f0;
+        transition: all 0.25s ease;
         cursor: pointer;
+        position: relative;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
 
     .shop-package-card:active {
-        transform: scale(0.96);
+        transform: scale(0.97);
+    }
+
+    .shop-package-card.selected {
+        border-color: #8b00ff;
+        background: #fdfaff;
+        box-shadow: 0 6px 18px rgba(139, 0, 255, 0.2);
+    }
+
+    .shop-package-card.selected::after {
+        content: '\f058';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        color: #8b00ff;
+        font-size: 16px;
     }
 
     .shop-package-icon {
-        font-size: 30px;
-        color: #4FC3F7;
-        margin-bottom: 8px;
+        font-size: 26px;
+        margin-bottom: 6px;
     }
 
     .shop-package-name {
         font-weight: 800;
-        font-size: 14px;
-        color: #333;
+        font-size: 13.5px;
+        color: #1e293b;
     }
 
     .shop-package-price {
-        font-weight: 700;
-        font-size: 16px;
-        color: var(--primary);
+        font-weight: 800;
+        font-size: 15px;
+        color: #ff5722;
         margin-top: 4px;
     }
 
-    .shop-package-btn {
-        background: var(--primary);
-        color: white;
+    /* PLAYER ID INPUT & CHECK BUTTON (EXACT MATCH IMAGE 1) */
+    .ff-uid-check-box {
+        width: 100%;
+        max-width: 450px;
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 18px 16px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+        border: 1px solid #e2e8f0;
+        margin-bottom: 20px;
+    }
+
+    .ff-uid-label {
+        font-size: 16px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .ff-uid-input {
+        width: 100%;
+        height: 48px;
+        border: 1.5px solid #bfdbfe;
+        border-radius: 10px;
+        padding: 0 16px;
+        font-size: 15px;
+        color: #1e293b;
+        background: #ffffff;
+        outline: none;
+        transition: 0.2s ease;
+        margin-bottom: 14px;
+        font-weight: 600;
+    }
+
+    .ff-uid-input:focus {
+        border-color: #8b00ff;
+        box-shadow: 0 0 0 3px rgba(139, 0, 255, 0.15);
+    }
+
+    .btn-check-ff-name {
+        width: 100%;
+        height: 48px;
+        background: #8b00ff;
+        color: #ffffff;
         border: none;
-        padding: 8px 20px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 800;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 6px 18px rgba(139, 0, 255, 0.35);
+        transition: 0.2s ease;
+    }
+
+    .btn-check-ff-name:active {
+        transform: scale(0.97);
+    }
+
+    /* FF PLAYER PREVIEW CARD (EXACT MATCH IMAGE 2 & FFX 3.8) */
+    .ff-player-card-preview {
+        width: 100%;
+        max-width: 450px;
+        background: #030407;
+        border-radius: 20px;
+        padding: 24px 18px;
+        color: #ffffff;
+        margin-bottom: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.45);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        animation: fadeInCard 0.3s ease-out;
+    }
+
+    @keyframes fadeInCard {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ff-card-header-name {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        margin-bottom: 18px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .ff-card-header-name .name-highlight {
+        color: #fde047;
+    }
+
+    .ff-badges-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+    }
+
+    .ff-badge-lv {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: #ffffff;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 15px;
+        font-weight: 800;
+        padding: 5px 14px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+    }
+
+    .ff-badge-uid {
+        background: #0d111a;
+        color: #94a3b8;
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 5px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .ff-badge-uid strong {
+        color: #ffffff;
+    }
+
+    .ff-badge-server {
+        background: #0d111a;
+        color: #ffffff;
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 4px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 20px;
+    }
+
+    .ff-stats-full-card {
+        width: 100%;
+        background: #0d111a;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 14px 16px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .ff-stat-icon-wrap {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .ff-stat-texts {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ff-stat-label-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+    }
+
+    .ff-stat-num-val {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1.1;
+        margin-top: 2px;
+    }
+
+    /* CONFIRM ORDER BUTTON */
+    .btn-submit-topup-final {
+        width: 100%;
+        max-width: 450px;
+        height: 50px;
+        background: linear-gradient(135deg, #ff5722 0%, #ff7043 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 800;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 8px 22px rgba(255, 87, 34, 0.35);
+        margin-bottom: 24px;
+    }
+
+    .btn-submit-topup-final:active {
+        transform: scale(0.98);
+    }
+
+    /* ORDER HISTORY LIST */
+    .shop-history-container {
+        width: 100%;
+        max-width: 450px;
         margin-top: 10px;
-        transition: 0.2s;
     }
 
-    .shop-package-btn:active {
-        transform: scale(0.92);
+    .shop-history-header {
+        font-size: 16px;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .shop-package-btn:disabled {
-        background: #ccc;
-        cursor: not-allowed;
+    .shop-order-card {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-badge-status {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .order-status-completed {
+        background: #dcfce7;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+    }
+
+    .order-status-pending {
+        background: #fef9c3;
+        color: #a16207;
+        border: 1px solid #fde047;
+    }
+
+    .order-status-cancelled {
+        background: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fca5a5;
     }
 
     /* MODERN SLIDER & HOME HEADER */
@@ -2994,13 +3270,90 @@
     
     <!-- SHOP -->
     <section id="tab-shop-view" class="app-section">
-        <div class="shop-title">💎 Diamond Shop</div>
-        <div class="shop-balance-card" style="background: linear-gradient(135deg, #ff5722, #e64a19); box-shadow: 0 8px 25px rgba(255,87,34,0.3);">
+        <div class="shop-title">💎 Diamond Top-Up Shop</div>
+        <div class="shop-balance-card">
             <div class="shop-balance-label">Your Available Balance</div>
             <div class="shop-balance-amount">৳ <span id="shop-balance">0</span></div>
             <div class="shop-balance-label-small">ডিপোজিট ও উইনিং ব্যালেন্স দিয়ে ডায়মন্ড কিনুন</div>
         </div>
+
+        <!-- 1. ডায়মন্ড প্যাকেজ তালিকা (ক্লিক করলেই সরাসরি সিলেক্ট হবে) -->
+        <div style="width:100%; max-width:450px; font-weight:800; font-size:14px; color:#475569; margin-bottom:8px;">
+            ১. ডায়মন্ড প্যাকেজ সিলেক্ট করুন:
+        </div>
         <div class="shop-package-grid" id="shop-package-grid"></div>
+
+        <!-- 2. প্লেয়ার আইডি ও নাম চেক বাটন (ছবি-১ অনুযায়ী) -->
+        <div class="ff-uid-check-box">
+            <label class="ff-uid-label">Player Id</label>
+            <input type="number" id="shop-player-uid" class="ff-uid-input" placeholder="Player Id" inputmode="numeric">
+            <button type="button" class="btn-check-ff-name" onclick="window.checkFreeFirePlayerName()">
+                <i class="fas fa-search"></i> আপনার গেম আইডির নাম চেক করুন
+            </button>
+        </div>
+
+        <!-- 3. ফ্রি ফায়ার প্লেয়ার প্রোফাইল কার্ড (ছবি-২ ও FFX 3.8 অনুযায়ী) -->
+        <div class="ff-player-card-preview" id="ff-preview-card">
+            <!-- নাম ও লোগো -->
+            <div class="ff-card-header-name">
+                <i class="fas fa-user-astronaut" style="color: #ef4444;"></i>
+                <span id="preview-ff-name" class="name-highlight">PLAYER</span>
+            </div>
+
+            <!-- ব্যাজ সমূহ (LV, UID, Server) -->
+            <div class="ff-badges-row">
+                <div class="ff-badge-lv">
+                    <i class="fas fa-star" style="color: #fde047;"></i>
+                    <span id="preview-ff-level">LV. 0</span>
+                </div>
+                <div class="ff-badge-uid">
+                    <i class="fas fa-fingerprint" style="color: #ef4444;"></i>
+                    <span>UID: <strong id="preview-ff-uid">000000000</strong></span>
+                </div>
+            </div>
+            
+            <div class="ff-badge-server">
+                <i class="fas fa-globe-americas" style="color: #ef4444;"></i>
+                <span>Server: <strong id="preview-ff-server">BD</strong></span>
+            </div>
+
+            <!-- Profile Likes Card -->
+            <div class="ff-stats-full-card">
+                <div class="ff-stat-icon-wrap" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="ff-stat-texts">
+                    <span class="ff-stat-label-title">PROFILE LIKES</span>
+                    <span class="ff-stat-num-val" id="preview-ff-likes">0</span>
+                </div>
+            </div>
+
+            <!-- Total EXP Card -->
+            <div class="ff-stats-full-card">
+                <div class="ff-stat-icon-wrap" style="background: rgba(245, 158, 11, 0.15); color: #ef4444;">
+                    <i class="fas fa-fire-flame-curved"></i>
+                </div>
+                <div class="ff-stat-texts">
+                    <span class="ff-stat-label-title">TOTAL EXP</span>
+                    <span class="ff-stat-num-val" id="preview-ff-exp">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. অর্ডার কনফার্ম বাটন (আইডি ভেরিফাই করার পর শো করবে) -->
+        <button type="button" id="btn-submit-order-final" class="btn-submit-topup-final" onclick="window.confirmDirectShopOrder()">
+            <i class="fas fa-check-circle"></i> অর্ডার নিশ্চিত করুন (CONFIRM ORDER)
+        </button>
+
+        <!-- 5. ব্যবহারকারীর পূর্ববর্তী টপ-আপ অর্ডারের লাইভ তালিকা -->
+        <div class="shop-history-container">
+            <div class="shop-history-header">
+                <i class="fas fa-history" style="color:#ff5722;"></i> আমার টপ-আপ অর্ডার সমূহ
+            </div>
+            <div id="shop-my-orders-list">
+                <div style="text-align:center; padding:15px; color:#94a3b8; font-size:12px;">কোনো অর্ডার হিস্টোরি নেই</div>
+            </div>
+        </div>
     </section>
 
     <!-- HOME -->
@@ -4371,7 +4724,7 @@
         }
     }
 
-    // ===== EXPOSE FUNCTIONS =====
+    // ===== EXPOSE FUNCTIONS (100% ERROR-FREE & SAFE) =====
     window.emailLogin = emailLogin;
     window.emailRegister = emailRegister;
     window.googleLogin = googleLogin;
@@ -4400,8 +4753,6 @@
     window.openMatchDetails = openMatchDetails;
     window.openResultDetails = openResultDetails;
     window.closeJoinPage = closeJoinPage;
-    window.buyTopUp = buyTopUp;
-    window.confirmUidPurchase = confirmUidPurchase;
     window.toggleRulesContent = toggleRulesContent;
     window.goBackFromMatches = goBackFromMatches;
     window.goBackFromMatchDetails = goBackFromMatchDetails;
@@ -4412,6 +4763,14 @@
     window.submitOtpVerification = submitOtpVerification;
     window.resendOtpCode = resendOtpCode;
     window.checkReaderAppStatus = checkReaderAppStatus;
+
+    // নতুন শপ সিস্টেমের সেফ ফাংশন কল
+    window.buyTopUp = function(pkgId, price) {
+        if(window.selectShopPackageItem) window.selectShopPackageItem(pkgId, price);
+    };
+    window.confirmUidPurchase = function() {
+        if(window.confirmDirectShopOrder) window.confirmDirectShopOrder();
+    };
 
     // ===== SPLASH & LOADER =====
     function hideSplash() {
@@ -4488,8 +4847,8 @@
     }, 1500);
 
     function initData() {
-        // Categories Listener (NO DEMO CATEGORIES)
-        onSnapshot(collection(db, 'categories'), async snapshot => {
+        // ১. Categories Listener (অ্যাডমিনের সব ক্যাটাগরি স্বয়ংক্রিয়ভাবে শো করবে)
+        onSnapshot(collection(db, 'categories'), snapshot => {
             activeCategories = {};
             const c = document.getElementById('dynamic-category-list');
             if(!c) return;
@@ -4500,10 +4859,11 @@
             snapshot.forEach(docSnap => {
                 const k = docSnap.id;
                 const v = docSnap.data();
-                activeCategories[k] = v;
+                activeCategories[k] = { id: k, ...v };
                 categoryCount++;
 
-                const catImage = v.img || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&auto=format&fit=crop&q=60';
+                const catImage = v.img || v.image || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&auto=format&fit=crop&q=60';
+                const catName = v.name || v.title || 'Tournament Category';
                 
                 c.innerHTML += `
                 <div class="cat-card-new" onclick="window.openCategory('${k}')">
@@ -4511,27 +4871,40 @@
                         <img src="${catImage}" class="cat-card-img" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&auto=format&fit=crop&q=60'">
                     </div>
                     <div class="cat-card-info">
-                        <div class="cat-card-title">${v.name || 'Category'}</div>
+                        <div class="cat-card-title">${catName}</div>
                     </div>
                 </div>`;
             });
 
             if(categoryCount === 0) {
-                c.innerHTML = "<div style='grid-column: 1 / -1; text-align: center; color: #94a3b8; font-size: 13px; padding: 30px;'>No categories added yet. Add from Admin Panel.</div>";
+                c.innerHTML = "<div style='grid-column: 1 / -1; text-align: center; color: #94a3b8; font-size: 13px; padding: 30px;'>এডমিন প্যানেলে কোনো ক্যাটাগরি পাওয়া যায়নি</div>";
             }
 
             updateCounts();
             renderRulesPage();
-        }, err => console.log("Categories error:", err.message));
+            // যদি অলরেডি কোনো ক্যাটাগরি ওপেন থাকে তবে ম্যাচগুলো রিফ্রেশ করা
+            if(currentActiveCategory) {
+                filterMatchTab(currentMatchFilter);
+            }
+        }, err => console.warn("Categories fetch error:", err.message));
 
-        // Matches Listener
+        // ২. Matches Listener (অ্যাডমিনের সব ম্যাচ লোড ও ফিল্টার হ্যান্ডলার)
         onSnapshot(collection(db, 'matches'), snapshot => {
             rawMatches = [];
             snapshot.forEach(docSnap => {
-                rawMatches.push({ dbKey: docSnap.id, ...docSnap.data() });
+                const data = docSnap.data();
+                rawMatches.push({ 
+                    dbKey: docSnap.id, 
+                    id: docSnap.id,
+                    ...data,
+                    // ক্যাটাগরি আইডি ফিল্ড মিসম্যাচ সেফগার্ড
+                    categoryId: data.categoryId || data.category || data.catId || ''
+                });
             });
+            
             updateCounts();
             
+            // ম্যাচ ট্যাব ও কার্ড রিফ্রেশ
             if(document.getElementById('matches-view').classList.contains('active')) {
                 filterMatchTab(currentMatchFilter);
             }
@@ -4539,9 +4912,9 @@
                 loadMyMatches();
             }
             loadResults();
-        }, err => console.log("Matches error:", err.message));
+        }, err => console.warn("Matches fetch error:", err.message));
 
-        // Participants Listener
+        // ৩. Participants Listener
         onSnapshot(collection(db, 'match_participants'), snapshot => {
             allParticipants = {};
             snapshot.forEach(docSnap => {
@@ -4553,16 +4926,30 @@
                 }
             });
             calculateJoinedMatches();
-        }, err => console.log("Participants error:", err.message));
+        }, err => console.warn("Participants fetch error:", err.message));
         
-        // App Settings Listener (Realtime Name & Logo Everywhere Fix)
+        // ৪. Top-Up Packages Listener (ডায়মন্ড শপ প্যাকেজ লোডার)
+        onSnapshot(collection(db, 'topup_packages'), snapshot => {
+            topUpPackages = [];
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                topUpPackages.push({ 
+                    id: docSnap.id, 
+                    name: data.name || data.packageName || data.title || 'Diamond Package',
+                    price: parseFloat(data.price || data.amount || 0),
+                    ...data 
+                });
+            });
+            renderShopPackages();
+        }, err => console.warn("Topup packages error:", err.message));
+
+        // ৫. App Settings Listener
         onSnapshot(doc(db, 'app_settings', 'config'), snap => {
             if(snap.exists()) {
                 const d = snap.data();
-                appSiteName = d.app_name || 'Tournament App';
+                appSiteName = d.app_name || 'ST TOURNAMENT BD';
                 document.title = appSiteName;
 
-                // Update App Name Everywhere & Cache in LocalStorage
                 try {
                     localStorage.setItem('app_site_name', appSiteName);
                 } catch(e){}
@@ -4574,7 +4961,6 @@
                 const aiModalName = document.getElementById('ai-modal-app-name');
                 if(aiModalName) aiModalName.innerText = appSiteName + " AI";
 
-                // Update App Logo Everywhere & Cache in LocalStorage
                 if(d.app_logo) {
                     try {
                         localStorage.setItem('app_site_logo', d.app_logo);
@@ -4602,7 +4988,6 @@
                 shopLink = d.shop_link || '';
                 appDownloadLink = d.app_download_link || '';
 
-                // Social Links
                 youtubeLink = d.youtube_link || '';
                 facebookLink = d.facebook_link || '';
                 tiktokLink = d.tiktok_link || '';
@@ -4613,7 +4998,6 @@
                 const ttBtn = document.getElementById('dev-link-tiktok');
                 if(ttBtn) ttBtn.href = tiktokLink || '#';
 
-                // AI Key & Signup Bonus
                 aiApiKey = d.ai_api_key || '';
                 signupBonusAmount = parseFloat(d.signup_bonus) || 0;
 
@@ -4624,9 +5008,9 @@
                     setTimeout(() => { document.getElementById('startup-modal').classList.add('active'); }, 1500);
                 }
             }
-        }, err => console.log("Config error:", err.message));
+        }, err => console.warn("Config error:", err.message));
 
-        // Sliders Listener
+        // ৬. Sliders Listener
         onSnapshot(collection(db, 'sliders'), snapshot => {
             const w = document.getElementById('banner-slider-wrapper');
             const dots = document.getElementById('slider-dots');
@@ -4644,16 +5028,7 @@
                 });
                 initSlider();
             }
-        }, err => console.log("Sliders error:", err.message));
-
-        // Top-Up Packages Listener
-        onSnapshot(collection(db, 'topup_packages'), snapshot => {
-            topUpPackages = [];
-            snapshot.forEach(docSnap => {
-                topUpPackages.push({ id: docSnap.id, ...docSnap.data() });
-            });
-            renderShopPackages();
-        }, err => console.log("Topup error:", err.message));
+        }, err => console.warn("Sliders error:", err.message));
     }
 
     function renderRulesPage() {
@@ -4693,6 +5068,25 @@
         }
     }
 
+    // =========================================================================
+    // 💎 FREE FIRE 9 API KEYS AUTO-ROTATION ENGINE & PLAYER CHECK SYSTEM
+    // =========================================================================
+    const FF_API_KEYS = [
+        "4APcwwZzvpr28xylNZ4xHmdUmt1QMg-YQpqHMhMUUeI", // Key 1
+        "LLsPehpkneNSxftqQejyjFpcLXRRXNvZvQmA4LaO-s0", // Key 2
+        "uYXsLp6VjpSor3CSN907mE6iKBVuiWULUclQDV8bBZQ", // Key 3
+        "xH0OHQlj_H_nNY9HZLki3at2gq64LLwy7Fw7dwMaruc", // Key 4
+        "FKincISGEaVdrVJ3_7Zyz4_tI0dWkT_7jqfAZWkWj7w", // Key 5
+        "cfvH5_Fv9brbVEcMAjRTup8ooLKm3uBKfUPsq4OINps", // Key 6
+        "LI1ZHe3AIt61AyPh2wiWAGx0Cipu-JMrJRVVIJ30y7Y", // Key 7
+        "IiW88SYLK_-joIu_zm3nqMYWEVyBBn_GzDPwR4MA4V0", // Key 8
+        "c2BPj5-6MfrdgnICmXeQjQVXgysq0W7FUTkFWgG6b5Q"  // Key 9
+    ];
+
+    let currentApiKeyIdx = 0;
+    let verifiedPlayerAccount = null;
+
+    // প্যাকেজ রেন্ডার (ক্লিক করলে অন-স্ক্রিন সরাসরি সিলেক্ট হবে)
     function renderShopPackages() {
         const grid = document.getElementById('shop-package-grid');
         if(!grid) return;
@@ -4701,161 +5095,308 @@
             grid.innerHTML = "<div style='grid-column:1/-1; text-align:center; color:#999; padding:20px;'>No packages available</div>";
             return;
         }
+
         topUpPackages.forEach(pkg => {
+            const isSelected = selectedPackageId === pkg.id;
             grid.innerHTML += `
-            <div class="shop-package-card">
+            <div class="shop-package-card ${isSelected ? 'selected' : ''}" onclick="window.selectShopPackageItem('${pkg.id}', ${pkg.price})">
                 <div class="shop-package-icon">💎</div>
                 <div class="shop-package-name">${pkg.name}</div>
                 <div class="shop-package-price">৳${pkg.price}</div>
-                <button class="shop-package-btn" onclick="window.buyTopUp('${pkg.id}', ${pkg.price})">Buy Now</button>
             </div>`;
         });
     }
 
-    function buyTopUp(packageId, price) {
-        if(!currentUser) return Swal.fire('Error', 'অনুগ্রহ করে প্রথমে লগইন করুন', 'error');
-        const totalAvailable = depositBal + winningBal;
-        if(totalAvailable < price) {
-            return Swal.fire('পর্যাপ্ত ব্যালেন্স নেই', `টপ-আপ করতে ৳${price} প্রয়োজন, আপনার মোট ব্যালেন্স আছে ৳${totalAvailable}!`, 'error');
-        }
-
-        selectedPackageId = packageId;
+    // প্যাকেজ সিলেক্ট ফাংশন
+    window.selectShopPackageItem = function(pkgId, price) {
+        selectedPackageId = pkgId;
         selectedPackagePrice = price;
-        
-        // মোডালে প্যাকেজ ও দাম সুন্দর করে দেখানো
-        const selectedPkg = topUpPackages.find(p => p.id === packageId);
-        const pkgBadge = document.getElementById('uid-modal-pkg-name');
-        if(pkgBadge) {
-            pkgBadge.innerText = selectedPkg ? `${selectedPkg.name} • ৳${price}` : `৳${price} TK`;
+        renderShopPackages();
+
+        // যদি অলরেডি প্লেয়ার ভেরিফাই করা থাকে তবে কনফার্ম বাটনে প্রাইস আপডেট হবে
+        const confirmBtn = document.getElementById('btn-submit-order-final');
+        if (confirmBtn && verifiedPlayerAccount) {
+            confirmBtn.innerHTML = `<i class="fas fa-check-circle"></i> ৳${price} দিয়ে অর্ডার কনফার্ম করুন`;
+            confirmBtn.style.display = 'flex';
+        }
+    };
+
+    // ৯টি এপিআই দিয়ে ফেইল-সেফ চেক
+    async function fetchFreeFireProfileWithRotation(targetUid) {
+        let lastError = "API Limit Exceeded or Network Error";
+
+        for (let i = 0; i < FF_API_KEYS.length; i++) {
+            const activeKey = FF_API_KEYS[currentApiKeyIdx];
+            try {
+                const response = await fetch(`https://api.gameskinbo.com/ff-info/get?uid=${targetUid}`, {
+                    method: 'GET',
+                    headers: { 'x-api-key': activeKey }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data && !data.error && data.AccountInfo) {
+                    return data; // সফল হলে সরাসরি রিটার্ন
+                } else {
+                    lastError = data.error || "Invalid response";
+                }
+            } catch (err) {
+                lastError = err.message;
+            }
+
+            // এই Key ফেইল করলে পরবর্তী Key তে সুইচ করা
+            currentApiKeyIdx = (currentApiKeyIdx + 1) % FF_API_KEYS.length;
         }
 
-        document.getElementById('uid-modal-input').value = '';
-        document.getElementById('uid-modal').classList.add('active');
+        throw new Error(lastError);
     }
 
-    async function confirmUidPurchase() {
-        const uid = document.getElementById('uid-modal-input').value.trim();
-        if(!uid || uid.length < 5) return Swal.fire('Error', 'Please enter a valid Free Fire UID', 'error');
+    // গেম আইডির নাম চেক করার ফাংশন (ছবি-১ এবং ছবি-২ অনুযায়ী)
+    window.checkFreeFirePlayerName = async function() {
+        const uidInput = document.getElementById('shop-player-uid');
+        const uid = uidInput ? uidInput.value.trim() : '';
 
-        const packageId = selectedPackageId;
-        const price = selectedPackagePrice;
+        if (!uid || uid.length < 5) {
+            return Swal.fire('সতর্কতা', 'অনুগ্রহ করে সঠিক Free Fire Player Id দিন!', 'warning');
+        }
+
+        if (!selectedPackageId) {
+            return Swal.fire('প্যাকেজ নির্বাচন করুন', 'দয়া করে উপরের যেকোনো একটি ডায়মন্ড প্যাকেজ সিলেক্ট করুন!', 'info');
+        }
+
+        toggleLoader(true);
+
+        try {
+            const data = await fetchFreeFireProfileWithRotation(uid);
+
+            const accName = data.AccountInfo?.AccountName || 'Unknown Player';
+            const accLevel = data.AccountInfo?.AccountLevel || '0';
+            const accRegion = data.AccountInfo?.AccountRegion || 'BD';
+            const accLikes = data.AccountInfo?.AccountLikes || '0';
+            const accExp = data.AccountInfo?.AccountEXP || '0';
+
+            verifiedPlayerAccount = {
+                uid: uid,
+                name: accName,
+                level: accLevel,
+                region: accRegion,
+                likes: accLikes,
+                exp: accExp
+            };
+
+            // ছবি-২ এর কার্ডে ডাটা বসানো
+            document.getElementById('preview-ff-name').innerText = accName;
+            document.getElementById('preview-ff-level').innerText = `LV. ${accLevel}`;
+            document.getElementById('preview-ff-uid').innerText = uid;
+            document.getElementById('preview-ff-server').innerText = accRegion;
+            document.getElementById('preview-ff-likes').innerText = accLikes;
+            document.getElementById('preview-ff-exp').innerText = accExp;
+
+            // কার্ড ও কনফার্ম বাটন ভিজিবল করা
+            document.getElementById('ff-preview-card').style.display = 'flex';
+            const confirmBtn = document.getElementById('btn-submit-order-final');
+            confirmBtn.innerHTML = `<i class="fas fa-check-circle"></i> ৳${selectedPackagePrice} দিয়ে অর্ডার কনফার্ম করুন`;
+            confirmBtn.style.display = 'flex';
+
+            toggleLoader(false);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'প্লেয়ার আইডি ভেরিফাইড! 🎉',
+                text: `প্লেয়ারের নাম: ${accName}`,
+                timer: 1600,
+                showConfirmButton: false
+            });
+
+        } catch (error) {
+            toggleLoader(false);
+            Swal.fire({
+                icon: 'error',
+                title: 'প্লেয়ার পাওয়া যায়নি!',
+                text: 'দয়া করে UID টি ভালোভাবে চেক করুন অথবা কিছু সময় পর চেষ্টা করুন।'
+            });
+        }
+    };
+
+    // অর্ডার কনফার্ম ও ডাটাবেজে সাবমিট
+    window.confirmDirectShopOrder = async function() {
+        if(!currentUser) return Swal.fire('লগইন করুন', 'অর্ডার করতে প্রথমে অ্যাকাউন্টে লগইন করুন', 'error');
+        if(!selectedPackageId || !selectedPackagePrice) return Swal.fire('প্যাকেজ দিন', 'দয়া করে ডায়মন্ড প্যাকেজ নির্বাচন করুন!', 'warning');
+        if(!verifiedPlayerAccount) return Swal.fire('আইডি চেক করুন', 'আগে আপনার গেম আইডি চেক করুন!', 'warning');
+
         const totalAvailable = depositBal + winningBal;
+        if(totalAvailable < selectedPackagePrice) {
+            return Swal.fire('পর্যাপ্ত ব্যালেন্স নেই', `টপ-আপ করতে ৳${selectedPackagePrice} প্রয়োজন, আপনার মোট ব্যালেন্স আছে ৳${totalAvailable.toFixed(2)}!`, 'error');
+        }
 
-        document.getElementById('uid-modal').classList.remove('active');
+        const selectedPkg = topUpPackages.find(p => p.id === selectedPackageId);
+        const pkgName = selectedPkg ? selectedPkg.name : 'Diamond Top-Up';
 
         const result = await Swal.fire({
-            title: 'Confirm Purchase',
+            title: 'অর্ডার নিশ্চিতকরণ',
             html: `
-                <div style="text-align:left; padding:10px 0;">
-                    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee;">
-                        <span style="color:#888;">Package:</span>
-                        <span style="font-weight:700;">${topUpPackages.find(p => p.id === packageId)?.name || 'Package'}</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee;">
-                        <span style="color:#888;">Price:</span>
-                        <span style="font-weight:700; color:var(--primary);">৳${price}</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee;">
-                        <span style="color:#888;">FF UID:</span>
-                        <span style="font-weight:700;">${uid}</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; padding:8px 0;">
-                        <span style="color:#888;">বাকি ব্যালেন্স:</span>
-                        <span style="font-weight:700; color:var(--success);">৳${totalAvailable - price}</span>
-                    </div>
+                <div style="text-align:left; font-size:13.5px; padding:6px 0; line-height:1.6;">
+                    <div style="border-bottom:1px solid #eee; padding:5px 0;">📦 <b>প্যাকেজ:</b> ${pkgName}</div>
+                    <div style="border-bottom:1px solid #eee; padding:5px 0;">💰 <b>মূল্য:</b> ৳${selectedPackagePrice} TK</div>
+                    <div style="border-bottom:1px solid #eee; padding:5px 0;">🎮 <b>প্লেয়ার নাম:</b> <span style="color:#ff5722; font-weight:800;">${verifiedPlayerAccount.name}</span></div>
+                    <div style="border-bottom:1px solid #eee; padding:5px 0;">🆔 <b>Player UID:</b> <code>${verifiedPlayerAccount.uid}</code></div>
+                    <div style="padding:5px 0; color:#16a34a;">💵 <b>বাকি ব্যালেন্স থাকবে:</b> ৳${(totalAvailable - selectedPackagePrice).toFixed(2)}</div>
                 </div>
             `,
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#ff5722',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Buy'
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'হ্যাঁ, অর্ডার কনফার্ম করুন',
+            cancelButtonText: 'বাতিল'
         });
 
-        if(result.isConfirmed) {
-            toggleLoader(true);
-            try {
-                // ডিপোজিট ও উইনিং ব্যালেন্স থেকে স্মার্টভাবে টাকা কাটা (প্রথমে ডিপোজিট, বাকিটা উইনিং)
-                let d = depositBal;
-                let w = winningBal;
-                let rem = price;
+        if(!result.isConfirmed) return;
 
-                if (d >= rem) {
-                    d -= rem;
-                    rem = 0;
-                } else {
-                    rem -= d;
-                    d = 0;
-                    w -= rem;
-                }
+        toggleLoader(true);
+        try {
+            // ব্যালেন্স ডিডাকশন (প্রথমে ডিপোজিট, বাকিটা উইনিং থেকে)
+            let d = depositBal;
+            let w = winningBal;
+            let rem = selectedPackagePrice;
 
-                await updateDoc(doc(db, 'users', currentUser.uid), { deposit: d, winning: w });
-                depositBal = d;
-                winningBal = w;
-                updateAllBalanceDisplays();
+            if (d >= rem) {
+                d -= rem;
+                rem = 0;
+            } else {
+                rem -= d;
+                d = 0;
+                w -= rem;
+            }
 
-                const now = new Date();
-                const orderRef = await addDoc(collection(db, 'topup_orders'), {
-                    userId: currentUser.uid,
-                    userName: currentUser.displayName || 'Unknown',
-                    userEmail: currentUser.email,
-                    packageId: packageId,
-                    packageName: topUpPackages.find(p => p.id === packageId)?.name || 'Package',
-                    amount: price,
-                    uid: uid,
-                    status: 'pending',
-                    timestamp: now.toLocaleString(),
-                    timestampMs: Date.now(),
-                    createdAt: serverTimestamp()
-                });
+            await updateDoc(doc(db, 'users', currentUser.uid), { deposit: d, winning: w });
+            depositBal = d;
+            winningBal = w;
+            updateAllBalanceDisplays();
 
-                await addDoc(collection(db, 'transactions'), {
-                    userId: currentUser.uid,
-                    type: 'Top-Up Order',
-                    amount: price,
-                    uid: uid,
-                    status: 'Pending',
-                    date: now.toLocaleString(),
-                    timestampMs: Date.now(),
-                    orderId: orderRef.id
-                });
+            const now = new Date();
+            const orderRef = await addDoc(collection(db, 'topup_orders'), {
+                userId: currentUser.uid,
+                userName: currentUser.displayName || 'Player',
+                userEmail: currentUser.email || '',
+                packageId: selectedPackageId,
+                packageName: pkgName,
+                amount: selectedPackagePrice,
+                uid: verifiedPlayerAccount.uid,
+                inGameName: verifiedPlayerAccount.name,
+                server: verifiedPlayerAccount.region,
+                status: 'pending',
+                timestamp: now.toLocaleString(),
+                timestampMs: Date.now(),
+                createdAt: serverTimestamp()
+            });
 
-                // 🔔 অটো নোটিফিকেশন: ডায়মন্ড টপ-আপ অর্ডার সাবমিটেড
-                await addDoc(collection(db, 'notifications'), {
-                    title: '💎 টপ-আপ অর্ডার জমা হয়েছে',
-                    body: `আপনার ${topUpPackages.find(p => p.id === packageId)?.name || 'প্যাকেজ'} (৳${price}) টপ-আপ অর্ডারটি সফলভাবে জমা হয়েছে। প্লেয়ার UID: ${uid}। ৫-১৫ মিনিটের মধ্যে ডায়মন্ড পৌঁছে যাবে।`,
-                    targetUserId: currentUser.uid,
-                    userName: currentUser.displayName || 'User',
-                    userEmail: currentUser.email || '',
-                    time: now.toLocaleString(),
-                    timestampMs: Date.now()
-                }).catch(console.warn);
+            await addDoc(collection(db, 'transactions'), {
+                userId: currentUser.uid,
+                type: `Top-Up (${pkgName})`,
+                amount: selectedPackagePrice,
+                uid: verifiedPlayerAccount.uid,
+                inGameName: verifiedPlayerAccount.name,
+                status: 'Pending',
+                date: now.toLocaleString(),
+                timestampMs: Date.now(),
+                orderId: orderRef.id
+            });
 
-                // 💎 ২ নম্বর বট: ডায়মন্ড টপ-আপ ইনভয়েস স্লিপ
-                const matchedPkg = topUpPackages.find(p => p.id === packageId);
-                const pkgName = matchedPkg ? matchedPkg.name : `Diamond Package (৳${price})`;
-                const customerName = currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'User');
-                const tgTopupInvoice = `💎 <b>NEW DIAMOND TOP-UP ORDER</b> 💎
+            // 🔔 অটো নোটিফিকেশন
+            await addDoc(collection(db, 'notifications'), {
+                title: '💎 টপ-আপ অর্ডার জমা হয়েছে',
+                body: `আপনার ${pkgName} (৳${selectedPackagePrice}) অর্ডারটি সফলভাবে জমা হয়েছে। গেম আইডি: ${verifiedPlayerAccount.name} (${verifiedPlayerAccount.uid})। ৫-১৫ মিনিটের মধ্যে ডায়মন্ড পাঠানো হবে।`,
+                targetUserId: currentUser.uid,
+                time: now.toLocaleString(),
+                timestampMs: Date.now()
+            }).catch(console.warn);
+
+            // 💎 টেলিগ্রাম বট এলার্ট
+            const tgTopupInvoice = `💎 <b>NEW DIAMOND TOP-UP ORDER</b> 💎
 ━━━━━━━━━━━━━━━━━━━
-👤 <b>Customer:</b> ${customerName}
+👤 <b>Customer:</b> ${currentUser.displayName || 'User'}
 📧 <b>Email:</b> ${currentUser.email || 'N/A'}
 🆔 <b>User UID:</b> <code>${currentUser.uid}</code>
-🎮 <b>Player Game UID:</b> <code>${uid}</code>
+🎮 <b>Player Name:</b> <b>${verifiedPlayerAccount.name}</b>
+🎯 <b>Game UID:</b> <code>${verifiedPlayerAccount.uid}</code>
+🌍 <b>Server:</b> ${verifiedPlayerAccount.region}
 📦 <b>Package:</b> ${pkgName}
-💰 <b>Price Paid:</b> ৳${price} TK
+💰 <b>Price:</b> ৳${selectedPackagePrice} TK
 📋 <b>Order ID:</b> <code>${orderRef.id}</code>
 ⏰ <b>Time:</b> ${now.toLocaleString()}
 ━━━━━━━━━━━━━━━━━━━
-<i>⚡ অনুগ্রহ করে প্লেয়ারের আইডিতে ডায়মন্ড পাঠিয়ে দিন!</i>`;
-                sendTelegramAlert(TG_TOPUP_BOT_TOKEN, TG_TOPUP_CHAT_ID, tgTopupInvoice);
+<i>⚡ অনুগ্রহ করে প্লেয়ারের আইডিতে ডায়মন্ড পাঠিয়ে অর্ডার অ্যাপ্রুভ করুন!</i>`;
+            sendTelegramAlert(TG_TOPUP_BOT_TOKEN, TG_TOPUP_CHAT_ID, tgTopupInvoice);
 
-                toggleLoader(false);
-                Swal.fire('Order Placed!', 'Your order has been sent to admin for approval.', 'success');
-            } catch(error) {
-                toggleLoader(false);
-                Swal.fire('Error', error.message, 'error');
-            }
+            // রিসেট ফর্ম
+            document.getElementById('shop-player-uid').value = '';
+            document.getElementById('ff-preview-card').style.display = 'none';
+            document.getElementById('btn-submit-order-final').style.display = 'none';
+            verifiedPlayerAccount = null;
+
+            toggleLoader(false);
+            Swal.fire({
+                icon: 'success',
+                title: 'অর্ডার সফলভাবে জমা হয়েছে! 🎉',
+                text: 'অ্যাডমিন দ্রুত ডায়মন্ড পাঠিয়ে অর্ডার সম্পূর্ণ করে দেবেন।',
+                confirmButtonColor: '#ff5722'
+            });
+
+        } catch(error) {
+            toggleLoader(false);
+            Swal.fire('Error', error.message, 'error');
         }
+    };
+
+    // ব্যবহারকারীর নিজস্ব টপ-আপ অর্ডারের লাইভ হিস্টোরি লিসেনার
+    function listenMyTopUpOrders() {
+        if (!currentUser) return;
+        const qOrders = query(collection(db, 'topup_orders'), where('userId', '==', currentUser.uid));
+        onSnapshot(qOrders, snap => {
+            const listEl = document.getElementById('shop-my-orders-list');
+            if (!listEl) return;
+
+            if (snap.empty) {
+                listEl.innerHTML = `<div style="text-align:center; padding:15px; color:#94a3b8; font-size:12px;">কোনো অর্ডার হিস্টোরি নেই</div>`;
+                return;
+            }
+
+            const orders = [];
+            snap.forEach(d => orders.push({ id: d.id, ...d.data() }));
+            orders.sort((a, b) => (b.timestampMs || 0) - (a.timestampMs || 0));
+
+            listEl.innerHTML = "";
+            orders.forEach(ord => {
+                let statusBadge = '';
+                const st = (ord.status || 'pending').toLowerCase();
+
+                if (st === 'approved' || st === 'success' || st === 'completed') {
+                    statusBadge = `<span class="order-badge-status order-status-completed"><i class="fas fa-check-circle"></i> Completed</span>`;
+                } else if (st === 'rejected' || st === 'cancelled' || st === 'canceled') {
+                    statusBadge = `<span class="order-badge-status order-status-cancelled"><i class="fas fa-times-circle"></i> Cancelled</span>`;
+                } else {
+                    statusBadge = `<span class="order-badge-status order-status-pending"><i class="fas fa-clock"></i> Pending</span>`;
+                }
+
+                listEl.innerHTML += `
+                <div class="shop-order-card">
+                    <div>
+                        <div style="font-weight:800; font-size:14px; color:#1e293b;">${ord.packageName || 'Diamond Package'}</div>
+                        <div style="font-size:11.5px; color:#64748b; margin-top:2px;">
+                            UID: <b>${ord.uid}</b> ${ord.inGameName ? `(${ord.inGameName})` : ''}
+                        </div>
+                        <div style="font-size:10.5px; color:#94a3b8; margin-top:3px;">
+                            <i class="far fa-clock"></i> ${ord.timestamp || ''}
+                        </div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-weight:900; font-size:14px; color:#ff5722; margin-bottom:4px;">৳${ord.amount || 0}</div>
+                        ${statusBadge}
+                    </div>
+                </div>`;
+            });
+        });
     }
 
     function updateCounts() {
@@ -5110,80 +5651,105 @@
         }
     }
 
-    /* ================= SMART BGM AUDIO CONTROLLER ================= */
-    const bgmAudio = document.getElementById('ffBgmAudio');
-    const bgmToggleBtn = document.getElementById('bgmToggleBtn');
+    /* ================= SMART BGM AUDIO CONTROLLER (100% FAIL-SAFE & ZERO CRASH) ================= */
+    function getBgmAudio() {
+        return document.getElementById('ffBgmAudio');
+    }
 
-    // লগিন/রেজিস্ট্রেশন পেজে আছে কিনা যাচাই করার ফাংশন
+    function getBgmToggleBtn() {
+        return document.getElementById('bgmToggleBtn');
+    }
+
     function isOnAuthScreen() {
-        const authView = document.getElementById('auth-view');
-        return !currentUser && authView && authView.classList.contains('active');
-    }
-
-    // সাথে সাথে অডিও সম্পূর্ণ বন্ধ ও রিস্টার্ট করার ফাংশন
-    function stopBgmSoundInstantly() {
-        if (bgmAudio) {
-            bgmAudio.pause();
-            bgmAudio.currentTime = 0;
+        try {
+            const authView = document.getElementById('auth-view');
+            return !currentUser && authView && authView.classList.contains('active');
+        } catch(e) {
+            return false;
         }
-        if (bgmToggleBtn) bgmToggleBtn.classList.add('muted');
     }
 
-    // শুধুমাত্র অথ পেজে থাকলে অডিও প্লে করার ফাংশন
+    function stopBgmSoundInstantly() {
+        try {
+            const audio = getBgmAudio();
+            const btn = getBgmToggleBtn();
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+            if (btn) btn.classList.add('muted');
+        } catch(e) {
+            console.warn("Audio stop error handled safely:", e);
+        }
+    }
+
     function playBgmSoundIfOnAuth() {
-        const isMuted = bgmToggleBtn && bgmToggleBtn.classList.contains('muted');
-        if (isOnAuthScreen() && !isMuted && bgmAudio && bgmAudio.paused) {
-            bgmAudio.volume = 0.65;
-            bgmAudio.play().then(() => {
-                if (bgmToggleBtn) bgmToggleBtn.classList.remove('muted');
-            }).catch(() => {});
+        try {
+            const audio = getBgmAudio();
+            const btn = getBgmToggleBtn();
+            const isMuted = btn && btn.classList.contains('muted');
+            if (isOnAuthScreen() && !isMuted && audio && audio.paused) {
+                audio.volume = 0.65;
+                audio.play().then(() => {
+                    if (btn) btn.classList.remove('muted');
+                }).catch(() => {});
+            }
+        } catch(e) {
+            console.warn("Audio play error handled safely:", e);
         }
     }
 
     window.toggleBgmSound = function() {
-        if (!bgmAudio) return;
-        if (bgmAudio.paused) {
-            if (isOnAuthScreen()) {
-                bgmAudio.volume = 0.65;
-                bgmAudio.play().then(() => {
-                    if (bgmToggleBtn) bgmToggleBtn.classList.remove('muted');
-                }).catch(() => {});
+        try {
+            const audio = getBgmAudio();
+            const btn = getBgmToggleBtn();
+            if (!audio) return;
+            if (audio.paused) {
+                if (isOnAuthScreen()) {
+                    audio.volume = 0.65;
+                    audio.play().then(() => {
+                        if (btn) btn.classList.remove('muted');
+                    }).catch(() => {});
+                }
+            } else {
+                audio.pause();
+                if (btn) btn.classList.add('muted');
             }
-        } else {
-            bgmAudio.pause();
-            if (bgmToggleBtn) bgmToggleBtn.classList.add('muted');
-        }
+        } catch(e) {}
     };
 
-    // প্রথম ইউজার ক্লিকে অডিও চালু (শুধুমাত্র যদি লগিন স্ক্রিনে থাকে)
     function startAudioOnGesture() {
-        if (isOnAuthScreen() && bgmAudio && bgmAudio.paused) {
-            bgmAudio.volume = 0.65;
-            bgmAudio.play().then(() => {
-                if (bgmToggleBtn) bgmToggleBtn.classList.remove('muted');
-            }).catch(() => {});
-        }
+        try {
+            const audio = getBgmAudio();
+            const btn = getBgmToggleBtn();
+            if (isOnAuthScreen() && audio && audio.paused) {
+                audio.volume = 0.65;
+                audio.play().then(() => {
+                    if (btn) btn.classList.remove('muted');
+                }).catch(() => {});
+            }
+        } catch(e) {}
         document.removeEventListener('click', startAudioOnGesture);
         document.removeEventListener('touchend', startAudioOnGesture);
     }
     document.addEventListener('click', startAudioOnGesture, { once: true });
     document.addEventListener('touchend', startAudioOnGesture, { once: true });
 
-    // 📱 অ্যাপ বা ব্রাউজার মিনিমাইজ করলে অডিও পজ এবং পুনরায় আসলে প্লে করার ইভেন্ট
     document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            // মিনিমাইজ বা অন্য অ্যাপে গেলে সাথে সাথে পজ
-            if (bgmAudio && !bgmAudio.paused) {
-                bgmAudio.pause();
-            }
-        } else {
-            // ব্যাকগ্রাউন্ড থেকে ফিরে আসলে শুধুমাত্র লগিন পেজে থাকলেই রিজ্যুম হবে
-            if (isOnAuthScreen()) {
-                playBgmSoundIfOnAuth();
+        try {
+            const audio = getBgmAudio();
+            if (document.hidden) {
+                if (audio && !audio.paused) {
+                    audio.pause();
+                }
             } else {
-                stopBgmSoundInstantly();
+                if (isOnAuthScreen()) {
+                    playBgmSoundIfOnAuth();
+                } else {
+                    stopBgmSoundInstantly();
+                }
             }
-        }
+        } catch(e) {}
     });
 
     // ===== গ্লোবাল ব্যালেন্স আপডেট ফাংশন (ক্র্যাশ প্রটেক্টেড) =====
@@ -5786,6 +6352,7 @@
             
             calculateJoinedMatches();
             loadNotifsBadge();
+            listenMyTopUpOrders();
             
             onSnapshot(doc(db, 'users', u.uid), snap => {
                 if(snap.exists()) {
@@ -5943,13 +6510,24 @@
         if(!c) return;
         c.innerHTML = "";
         
-        let m = rawMatches.filter(x => x.categoryId === currentActiveCategory);
-        if(status === 'Upcoming') m = m.filter(x => x.status === 'Upcoming');
-        else if(status === 'Ongoing') m = m.filter(x => x.status === 'Ongoing');
-        else if(status === 'Finished') m = m.filter(x => x.status === 'Finished');
+        // অ্যাডমিনের ক্যাটাগরি আইডি এবং ম্যাচের ক্যাটাগরি আইডি ম্যাচিং (উভয় ফিল্ড চেক করবে)
+        let m = rawMatches.filter(x => {
+            const matchCat = String(x.categoryId || x.category || x.catId || '').trim();
+            const activeCat = String(currentActiveCategory || '').trim();
+            return matchCat === activeCat;
+        });
+
+        // স্ট্যাটাস ফিল্টারিং (ছোট-বড় হাতের অক্ষরের সমস্যা প্রতিরোধ)
+        if(status === 'Upcoming') {
+            m = m.filter(x => (x.status || 'Upcoming').toLowerCase() === 'upcoming');
+        } else if(status === 'Ongoing') {
+            m = m.filter(x => (x.status || '').toLowerCase() === 'ongoing');
+        } else if(status === 'Finished') {
+            m = m.filter(x => (x.status || '').toLowerCase() === 'finished' || (x.status || '').toLowerCase() === 'result');
+        }
         
         if(m.length === 0) {
-            c.innerHTML = `<div class='empty-msg'>No ${status} Matches Found</div>`;
+            c.innerHTML = `<div class='empty-msg'>এই ক্যাটাগরিতে কোনো ${status} ম্যাচ পাওয়া যায়নি</div>`;
         } else {
             m.forEach(x => c.innerHTML += createMatchCardHTML(x, (status === 'Finished' ? 'result' : 'play')));
         }
